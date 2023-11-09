@@ -5,8 +5,7 @@
 
 ## DB Schema
 
-![db-schema]
-![Alt text](image.png)
+![Alt text](Schema.png)
 
 
 
