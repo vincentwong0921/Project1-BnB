@@ -5,9 +5,9 @@
 
 ## DB Schema
 
-![Alt text](Schema.png)
+![db-schema]
 
-
+[db-schema]: ./images/Schema.png
 
 ## API Documentation
 
