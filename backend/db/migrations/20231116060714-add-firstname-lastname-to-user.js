@@ -16,10 +16,10 @@ module.exports = {
      */
     await queryInterface.addColumn('Users', 'firstName', {
       type: Sequelize.STRING,
-    })
+    }, options)
     await queryInterface.addColumn('Users', 'lastName', {
       type: Sequelize.STRING,
-    })
+    }, options)
   },
 
   async down (queryInterface, Sequelize) {
