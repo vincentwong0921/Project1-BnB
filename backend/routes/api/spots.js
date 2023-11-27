@@ -9,6 +9,38 @@ const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
+const validateSpot = [
+    check("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Street address is required"),
+  check("city")
+    .exists({ checkFalsy: true })
+    .withMessage("City is required"),
+  check("state")
+    .exists({ checkFalsy: true })
+    .withMessage("State is required"),
+  check("country")
+    .exists({ checkFalsy: true })
+    .withMessage("Country is required"),
+  check("lat")
+    .exists({ checkFalsy: true })
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Latitude must be within -90 and 90"),
+  check("lng")
+    .exists({ checkFalsy: true })
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Longitude must be within -180 and 180"),
+  check("name")
+    .exists({ checkFalsy: true })
+    .isLength({ max: 49 })
+    .withMessage("Name must be less than 50 characters"),
+  check("price")
+    .exists({ checkFalsy: true})
+    .isFloat({ min: 1 })
+    .withMessage('Price per day must be a positive number'),
+  handleValidationErrors,
+]
+
 router.get('/', async(req, res, next) => {
     const spots = await Spot.findAll({
         include: [
@@ -149,5 +181,26 @@ router.get('/:id', async(req, res) => {
         return res.status(404).json({message: "Spot couldn't be found"})
     }
 })
+
+router.post('/', requireAuth, validateSpot, async(req, res) => {
+    const { address, city, state, country, lat, lng, name, description, price } = req.body
+    const ownerId = req.user.id
+
+    const spot = await Spot.create({
+        ownerId,
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price
+    })
+
+    res.json(spot)
+})
+
 
 module.exports = router;
