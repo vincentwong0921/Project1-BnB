@@ -47,7 +47,7 @@ module.exports = {
         description: 'Okay',
         price: 369
       }
-    ], { validate: true})
+    ], { validate: true })
   },
 
   async down (queryInterface, Sequelize) {
