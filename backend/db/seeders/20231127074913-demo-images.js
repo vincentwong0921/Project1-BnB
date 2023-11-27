@@ -21,6 +21,24 @@ module.exports = {
         url: 'url2',
         preview: true,
         imageableId: 2,
+        imageableType: 'Review'
+      },
+      {
+        url: 'url3',
+        preview: true,
+        imageableId: 1,
+        imageableType: 'Spot'
+      },
+      {
+        url: 'url4',
+        preview: true,
+        imageableId: 2,
+        imageableType: 'Spot'
+      },
+      {
+        url: 'url5',
+        preview: true,
+        imageableId: 3,
         imageableType: 'Spot'
       }
     ], { validate: true })
