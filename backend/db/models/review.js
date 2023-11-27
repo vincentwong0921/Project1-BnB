@@ -10,6 +10,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Review.hasMany(
+        models.Image,
+        {
+          foreignKey: 'imageableId',
+          constraints: false,
+          scope: {
+            imagableType: 'Review'
+          }
+        }
+      )
     }
   }
   Review.init({
