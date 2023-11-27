@@ -52,6 +52,50 @@ router.get('/', async(req, res, next) => {
     res.json(returnData)
 })
 
+router.get('/current', requireAuth, async(req, res, next) => {
+    const user = req.user
+
+    const returnData = {}
+    let spotsList = []
+
+    const spots = await Spot.findAll({
+        where: {
+            ownerId: user.id
+        },
+        include: [{model: Review}, {model: Image}]
+    })
+
+    spots.forEach(spot => {
+        spotsList.push(spot.toJSON())
+    })
+
+    spotsList.forEach(spot => {
+        let sum = 0
+        spot.Reviews.forEach(review => {
+            if(review.stars){
+                sum += review.stars
+            }
+        })
+
+        if(sum !== 0){
+            spot.avgRating = sum / spot.Reviews.length
+        } else{
+            spot.avgRating = 0
+        }
+
+        delete spot.Reviews;
+
+        spot.Images.forEach(image => {
+            spot.previewImage = image.url
+        })
+
+        delete spot.Images;
+    })
+
+    returnData.Spots = spotsList
+
+    res.json(returnData)
+})
 
 
 
