@@ -11,7 +11,10 @@ const router = express.Router();
 
 router.get('/', async(req, res, next) => {
     const spots = await Spot.findAll({
-        include: [{model: Image}]
+        include: [
+            { model: Review},
+            { model: Image, attributes: ['url']}
+        ]
     })
 
     return res.json(spots)
