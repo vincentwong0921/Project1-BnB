@@ -2,7 +2,7 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { setTokenCookie } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const { check } = require('express-validator');
@@ -20,7 +20,6 @@ const validateLogin = [
         .withMessage('Password is required'),
     handleValidationErrors
 ];
-
 
 router.get('/', async(req, res) => {
     const { user } = req
