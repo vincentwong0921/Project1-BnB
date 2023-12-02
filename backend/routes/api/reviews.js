@@ -57,7 +57,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
 })
 
 router.post('/:reviewId/images', requireAuth, async(req, res) => {
-    const userId = req.user.id;
+    const userId = Number(req.user.id);
     const reviewId = req.params.reviewId;
     const { url } = req.body;
 
@@ -101,6 +101,22 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res) => {
     } else {
         await userReview.update({review, stars})
         res.json(userReview)
+    }
+})
+
+router.delete('/:reviewId', requireAuth, async(req, res) => {
+    const reviewId = req.params.reviewId;
+    const userId = Number(req.user.id);
+
+    const userReview = await Review.findByPk(reviewId)
+
+    if(!userReview){
+        return res.status(404).json({message: "Review couldn't be found"})
+    } else if(userReview.userId !== userId){
+        return res.status(403).json({message: 'Forbidden'})
+    } else {
+        await userReview.destroy();
+        return res.json({message: "Successfully deleted"})
     }
 })
 
