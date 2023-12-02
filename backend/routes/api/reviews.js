@@ -6,6 +6,7 @@ const { User, Spot, Review, Image, Booking } = require("../../db/models");
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const e = require("express");
 
 const router = express.Router();
 
@@ -45,6 +46,36 @@ router.get('/current', requireAuth, async(req, res, next) => {
     res.json(returnData)
 })
 
+router.post('/:reviewId/images', requireAuth, async(req, res) => {
+    const userId = req.user.id;
+    const reviewId = req.params.reviewId;
+    const { url } = req.body;
+
+    const review = await Review.findByPk(reviewId)
+
+    if(!review){
+        return res.status(404).json({message: "Review couldn't be found"})
+    } else if(review.userId !== userId){
+        return res.status(403).json({message: 'Forbidden'})
+    } else {
+        const images = await Image.findAll({where: {imageableId: review.id}})
+
+        if(images.length >= 10){
+            return res.status(403).json({message: "Maximum number of images for this resource was reached"})
+        } else {
+            const newImage = await Image.create({
+                url,
+                preview: 1,
+                imageableId: review.id,
+                imageableType: 'Review'
+            })
+
+            const returnData = {id: newImage.id, url: newImage.url}
+
+            return res.json(returnData)
+        }
+    }
+})
 
 
 
