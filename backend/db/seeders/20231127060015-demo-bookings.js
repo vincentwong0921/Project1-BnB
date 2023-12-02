@@ -14,26 +14,26 @@ module.exports = {
       {
         spotId: 1,
         userId: 2,
-        startDate: "2023-11-27",
-        endDate: "2023-11-28"
+        startDate: "2024-11-27",
+        endDate: "2024-11-28"
       },
       {
         spotId: 2,
         userId: 1,
-        startDate: "2023-11-28",
-        endDate: "2023-11-29"
+        startDate: "2024-11-29",
+        endDate: "2024-11-30"
       },
       {
         spotId: 3,
         userId: 1,
-        startDate: "2023-11-27",
-        endDate: "2023-11-28"
+        startDate: "2024-12-02",
+        endDate: "2024-12-05"
       },
       {
         spotId: 3,
         userId: 2,
-        startDate: "2023-11-27",
-        endDate: "2023-11-28"
+        startDate: "2024-12-6",
+        endDate: "2024-12-10"
       },
     ], { validate: true })
   },

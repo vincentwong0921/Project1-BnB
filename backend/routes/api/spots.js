@@ -281,6 +281,60 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
     res.json(spot)
 })
 
+router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
+    const spotId = Number(req.params.spotId);
+    const userId = req.user.id;
+
+    const spot = await Spot.findByPk(spotId)
+    const bookings = await Booking.findAll({where: {spotId: spotId}})
+    const { startDate, endDate } = req.body;
+
+    if(spot.ownerId === userId){
+        return res.status(403).json({message: 'Forbidden'})
+    }
+
+    if(!spot){
+        return res.status(404).json({message: "Spot couldn't be found"})
+    }
+
+    let conflict = false;
+
+    bookings.forEach(booking => {
+        const existingStartDate = new Date(booking.startDate).getTime()
+        const existingEndDate = new Date(booking.endDate).getTime()
+        const newStartDate = new Date(startDate).getTime()
+        const newEndDate = new Date(endDate).getTime()
+
+        if(
+            newStartDate >= existingStartDate && newStartDate <= existingEndDate ||
+            newEndDate >= existingStartDate && newEndDate <= existingEndDate ||
+            newStartDate <= existingStartDate && newEndDate >= existingEndDate
+        ){
+            conflict = true;
+            const err = new Error("Sorry, this spot is already booked for the specified dates")
+            err.status = 403;
+            err.errors = {
+                startDate: "Start date conflicts with an existing booking",
+                endDate: "End date conflicts with an existing booking"
+            }
+            next(err)
+        }
+    })
+
+    if(conflict === true) {
+        return
+    } else {
+        const newBooking = await Booking.create({
+            spotId,
+            userId,
+            startDate,
+            endDate
+        })
+
+        return res.json(newBooking);
+    }
+})
+
 router.post('/:spotId/images', requireAuth, async(req, res) => {
     const id = req.params.spotId;
 
@@ -289,7 +343,6 @@ router.post('/:spotId/images', requireAuth, async(req, res) => {
     const spot = await Spot.findByPk(id)
 
     if(spot){
-
         const image = await Image.create({
             url,
             preview,
@@ -357,6 +410,7 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res) => {
         return res.status(404).json({message: "Spot couldn't be found"})
     }
 })
+
 
 router.delete('/:spotId', requireAuth, async(req, res) => {
     const id = req.params.spotId;
