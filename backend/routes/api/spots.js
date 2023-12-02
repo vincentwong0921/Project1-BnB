@@ -182,6 +182,39 @@ router.get('/:id', async(req, res) => {
     }
 })
 
+router.get('/:spotId/reviews', async(req, res, next) => {
+    const id = req.params.spotId;
+
+    const spot = await Spot.findByPk(id)
+
+    if(spot){
+        const spotReviews = await spot.getReviews({
+            where:{spotId: id},
+            include: [
+                {model: User, attributes: {exclude: ['username', 'email', 'hashedPassword', 'createdAt', 'updatedAt']}},
+                {model: Image, attributes: {exclude : ['preview', 'imageableId','imageableType', 'createdAt', 'updatedAt']}}
+            ]
+        })
+
+        const reviewsList = []
+        const returnData = {}
+
+        spotReviews.forEach(spotReview => {
+            reviewsList.push(spotReview.toJSON())
+        })
+
+        reviewsList.forEach(review => {
+            review.ReviewImages = review.Images
+            delete review.Images
+        })
+
+        returnData.Reviews = reviewsList
+        return res.json(returnData)
+    } else{
+        res.status(404).json({message: "Spot couldn't be found"})
+    }
+})
+
 router.post('/', requireAuth, validateSpot, async(req, res) => {
     const { address, city, state, country, lat, lng, name, description, price } = req.body
     const ownerId = req.user.id

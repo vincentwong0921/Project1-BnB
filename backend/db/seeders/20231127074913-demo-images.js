@@ -40,7 +40,19 @@ module.exports = {
         preview: true,
         imageableId: 3,
         imageableType: 'Spot'
-      }
+      },
+      {
+        url: 'new urllllllll',
+        preview: true,
+        imageableId: 3,
+        imageableType: 'Review'
+      },
+      {
+        url: 'Hello.url',
+        preview: true,
+        imageableId: 5,
+        imageableType: 'Review'
+      },
     ], { validate: true })
   },
 
@@ -48,7 +60,7 @@ module.exports = {
     options.tableName = 'Images';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      imageableId: { [Op.in]: [1, 2] }
+      imageableId: { [Op.in]: [1, 2, 3, 5] }
     }, {})
   }
 };
