@@ -1,7 +1,7 @@
 const express = require("express");
 
-const { requireAuth } = require("../../utils/auth");
-const { User, Spot, Review, Image } = require("../../db/models");
+const { requireAuth, restoreUser } = require("../../utils/auth");
+const { User, Spot, Review, Image, Booking } = require("../../db/models");
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -222,6 +222,42 @@ router.get('/:spotId/reviews', async(req, res, next) => {
         return res.json(returnData)
     } else{
         res.status(404).json({message: "Spot couldn't be found"})
+    }
+})
+
+router.get('/:spotId/bookings', requireAuth, async(req, res) => {
+    const userId = req.user.id;
+    const spotId = req.params.spotId;
+
+    const spot = await Spot.findByPk(spotId)
+
+    if(!spot){
+        return res.status(404).json({message: "Spot couldn't be found"})
+    }
+
+    const bookings = await Booking.findAll({
+        where: {spotId: spot.id},
+        include: {model: User, attributes: {exclude: ['username','createdAt', 'updatedAt', 'email', 'hashedPassword']}}
+    })
+
+    const bookingsList = [];
+
+    bookings.forEach(booking => {
+        bookingsList.push(booking.toJSON())
+    })
+
+    if(userId !== spot.ownerId){
+        const returnData = {};
+        const ownerSpot = bookingsList.map(booking => {
+            const { id, userId, User, createdAt, updatedAt, ...rest } = booking;
+            return rest;
+        })
+        returnData.Bookings = ownerSpot;
+        return res.json(returnData);
+    } else{
+        const returnData = {};
+        returnData.Bookings = bookingsList
+        return res.json(returnData)
     }
 })
 
