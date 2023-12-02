@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'imageableId',
           constraints: false,
           scope: {
-            imagableType: 'Review'
+            imageableType: 'Review'
           }
         }
       )

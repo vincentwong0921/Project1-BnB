@@ -24,7 +24,7 @@ module.exports = {
         price: 123
       },
       {
-        ownerId: 2,
+        ownerId: 1,
         address: '238 This Lane',
         city: 'Los Angelees',
         state: 'California',
@@ -46,6 +46,18 @@ module.exports = {
         name: 'Academy',
         description: 'Okay',
         price: 369
+      },
+      {
+        ownerId: 1,
+        address: '556 skylane drive',
+        city: 'Union City',
+        state: 'California',
+        country: 'United States of America',
+        lat: 18.94545,
+        lng: -26.2242,
+        name: 'Not Sure',
+        description: 'Yeah',
+        price: 586
       }
     ], { validate: true })
   },
