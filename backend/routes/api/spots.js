@@ -8,6 +8,26 @@ const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
+const validateBooking = [
+    check("startDate")
+        .exists({checkFalsy: true})
+        .withMessage("startDate is required")
+        .custom((value) => {
+            const today = new Date().getTime();
+            if (new Date(value).getTime() < today) {
+              throw new Error('startDate cannot be in the past');
+            }}),
+    check("endDate")
+        .exists({checkFalsy: true})
+        .withMessage("endDate is required")
+        .custom((value, { req }) => {
+            const startDate = req.body.startDate;
+            if (new Date(value) <= new Date(startDate)) {
+              throw new Error('endDate cannot be on or before startDate');
+            }}),
+    handleValidationErrors
+]
+
 const validateReview = [
     check("review")
         .exists({ checkFalsy: true})
@@ -225,7 +245,7 @@ router.get('/:spotId/reviews', async(req, res, next) => {
     }
 })
 
-router.get('/:spotId/bookings', requireAuth, async(req, res) => {
+router.get('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
 

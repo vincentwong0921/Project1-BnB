@@ -36,9 +36,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isDate: true,
         isAfterToday(value){
-          const today = new Date();
-          if(new Date(value) < today){
-            throw new Error("startDate cannnot be in the past")
+          const today = new Date().getTime();
+          if (new Date(value).getTime() < today) {
+            throw new Error('startDate cannot be in the past')
           }
         }
       }
@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isDate: true,
         isAfterStartDate(value){
-          if(new Date(value) < new Date(this.startDate)){
-            throw new Error("endDate cannot be on or before startDate")
+          if (new Date(value) <= new Date(this.startDate)) {
+            throw new Error("endDate cannot be on or before startDate");
           }
         }
       }
