@@ -22,7 +22,14 @@ module.exports = {
         userId: 1,
         startDate: "2023-11-28",
         endDate: "2023-11-29"
-      }
+      },
+      {
+        spotId: 3,
+        userId: 1,
+        startDate: "2023-11-27",
+        endDate: "2023-11-28"
+      },
+
     ], { validate: true })
   },
 
