@@ -16,12 +16,13 @@ module.exports = (sequelize, DataTypes) => {
       ),
       Spot.hasMany(
         models.Review,
-        { foreignKey: 'spotId'},
+        { foreignKey: 'spotId', onDelete: 'CASCADE'},
       ),
       Spot.hasMany(
         models.Image,
         {
           foreignKey: 'imageableId',
+          onDelete: 'CASCADE',
           constraints: false,
           scope: {
             imageableType: 'Spot'
