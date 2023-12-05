@@ -241,7 +241,6 @@ router.get('/current', requireAuth, async(req, res, next) => {
     const returnData = {}
     let spotsList = []
 
-    where.ownerId = userId
     const spots = await Spot.findAll({
         where: {
             ownerId: userId
