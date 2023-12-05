@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(
         models.Spot,
-        {foreignKey: 'ownerId', onDelete: 'CASCADE'}
+        {foreignKey: 'ownerId'}
       ),
       User.hasMany(
         models.Review,
-        {foreignKey: 'userId', onDelete: 'CASCADE'}
+        {foreignKey: 'userId'}
       )
     }
   };
