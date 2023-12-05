@@ -2,11 +2,76 @@ const express = require("express");
 
 const { requireAuth, restoreUser } = require("../../utils/auth");
 const { User, Spot, Review, Image, Booking } = require("../../db/models");
+const { Op } = require('sequelize');
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
+
+const validateQuery = [
+    check("page")
+        .isFloat({min: 1})
+        .withMessage("Page must be greater than or equal to 1"),
+    check("size")
+        .isFloat({min: 1})
+        .withMessage("Size must be greater than or equal to 1"),
+    check("minLat")
+        .isDecimal({min: -90})
+        .optional()
+        .custom(value => {
+            if(value < -90){
+                throw new Error("Minimum latitude is invalid")
+            }
+            return true;
+        }),
+    check("maxLat")
+        .isDecimal({max: 90})
+        .optional()
+        .custom(value => {
+            if(value > 90){
+                throw new Error("Maximum latitude is invalid")
+            }
+            return true;
+        }),
+    check("minLng")
+        .isDecimal({min: -180})
+        .optional()
+        .custom(value => {
+            if(value < -180){
+                throw new Error("Minimum longitude is invalid")
+            }
+            return true;
+        }),
+    check("maxLng")
+        .isDecimal({max: 180})
+        .optional()
+        .custom(value => {
+            if(value > 180){
+                throw new Error("Maximum longitude is invalid")
+            }
+            return true;
+        }),
+    check("minPrice")
+        .optional()
+        .isDecimal()
+        .custom(value => {
+            if(value < 0){
+                throw new Error("Minimum price must be greater than or equal to 0")
+            }
+            return true;
+        }),
+    check("maxPrice")
+        .optional()
+        .isDecimal()
+        .custom(value => {
+            if(value < 0){
+                throw new Error("Maximum price must be greater than or equal to 0")
+            }
+            return true;
+        }),
+    handleValidationErrors,
+]
 
 const validateReview = [
     check("review")
@@ -46,18 +111,87 @@ const validateSpot = [
     .withMessage("Name must be less than 50 characters"),
   check("price")
     .exists({ checkFalsy: true})
-    .isFloat({ min: 1 })
+    .isDecimal({ min: 0 })
     .withMessage('Price per day must be a positive number'),
   handleValidationErrors,
 ]
 
-router.get('/', async(req, res, next) => {
-    const spots = await Spot.findAll({
-        include: [
-            { model: Review },
-            { model: Image }
-        ]
-    })
+router.get('/', validateQuery, async(req, res, next) => {
+    const where = {};
+    let query = { where }
+
+    const { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+
+    if(minLat){
+        where.lat = {[Op.gte]: minLat}
+    }
+
+    if(maxLat){
+        where.lat = {[Op.lte]: maxLat}
+    }
+
+    if(minLat && maxLat){
+        if(minLat > maxLat){
+            const err = new Error("Bad Request")
+            err.status = 400;
+            err.errors = ["Min Lat cannot be greater than Max Lat"]
+            next(err)
+        } else{
+            where.lat = {[Op.between]: [minLat, maxLat]}
+        }
+    }
+
+    if(minLng){
+        where.lng = {[Op.gte]: minLng}
+    }
+
+    if(maxLng){
+        where.lng = {[Op.lte]: maxLng}
+    }
+
+    if(minLng && maxLng){
+        if(minLng > maxLng){
+            const err = new Error("Bad Request")
+            err.status = 400;
+            err.errors = ["Min Lng cannot be greater than Max Lng"]
+            next(err)
+        } else{
+            where.lng = {[Op.between]: [minLng, maxLng]}
+        }
+    }
+
+    if(minPrice){
+        where.price = {[Op.gte]: minPrice}
+    }
+
+    if(maxPrice){
+        where.price = {[Op.lte]: maxPrice}
+    }
+
+    if(minPrice && maxPrice){
+        if(minPrice > maxPrice){
+            const err = new Error("Bad Request")
+            err.status = 400;
+            err.errors = ["Min Price cannot be greater than Max Price"]
+            next(err)
+        } else{
+            where.price = {[Op.between]:[minPrice, maxPrice]}
+        }
+    }
+
+    let page = req.query.page === undefined ? 1 : parseInt(req.query.page);
+    let size = req.query.size === undefined ? 1 : parseInt(req.query.size)
+
+    if(page > 10) page = 10;
+    if(size > 20) size = 20;
+
+    query.limit = size;
+    query.offset = size * ( page - 1 );
+    query.include = [{ model: Review },{ model: Image }]
+
+    const spots = await Spot.findAll(
+        query,
+    )
 
     const returnData = {}
     let spotsList = []
@@ -93,20 +227,24 @@ router.get('/', async(req, res, next) => {
         delete spot.Images;
     })
 
-    returnData.Spots = spotsList
+    returnData.Spots = spotsList;
+    returnData.page = page;
+    returnData.size = size;
 
     return res.json(returnData)
 })
 
 router.get('/current', requireAuth, async(req, res, next) => {
-    const user = req.user
+    const userId = req.user.id
+
 
     const returnData = {}
     let spotsList = []
 
+    where.ownerId = userId
     const spots = await Spot.findAll({
         where: {
-            ownerId: user.id
+            ownerId: userId
         },
         include: [{model: Review}, {model: Image}]
     })
@@ -142,7 +280,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
         delete spot.Images;
     })
 
-    returnData.Spots = spotsList
+    returnData.Spots = spotsList;
 
     return res.json(returnData)
 })
@@ -309,7 +447,7 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
     if(!spot){
         return res.status(404).json({message: "Spot couldn't be found"})
     }
-    
+
     if(spot.ownerId === userId){
         return res.status(403).json({message: 'Forbidden'})
     }
