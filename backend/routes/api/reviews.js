@@ -27,10 +27,22 @@ router.get('/current', requireAuth, async(req, res, next) => {
     const reviews = await Review.findAll({
         where: {userId: userId},
         include: [
-            {model: User, attributes: {exclude: ['username', 'hashedPassword', 'email', 'createdAt', 'updatedAt']}},
-            {model: Spot, attributes: {exclude: ['createdAt', 'updatedAt']},
-                include: {model: Image, attributes: {exclude: ['id', 'preview', 'imageableId', 'imageableType', 'createdAt', 'updatedAt']}}},
-            {model: Image, attributes: {exclude: ['preview', 'imageableId', 'imageableType', 'createdAt', 'updatedAt']}}
+            {
+                model: User,
+                attributes: {exclude: ['username', 'hashedPassword', 'email', 'createdAt', 'updatedAt']}
+            },
+            {
+                model: Spot,
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                include: {
+                    model: Image,
+                    attributes: {exclude: ['id', 'preview', 'imageableId', 'imageableType', 'createdAt', 'updatedAt']}
+                }
+            },
+            {
+                model: Image,
+                attributes: {exclude: ['preview', 'imageableId', 'imageableType', 'createdAt', 'updatedAt']}
+            }
         ]
     })
 
@@ -52,7 +64,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
     })
 
     returnData.Reviews = reviewLists;
-    res.json(returnData)
+    return res.json(returnData)
 })
 
 router.post('/:reviewId/images', requireAuth, async(req, res) => {

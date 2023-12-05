@@ -58,6 +58,18 @@ module.exports = {
         name: 'Not Sure',
         description: 'Yeah',
         price: 586
+      },
+      {
+        ownerId: 2,
+        address: '3899 newport drive',
+        city: 'Newark',
+        state: 'California',
+        country: 'United States of America',
+        lat: 25.94545,
+        lng: -23.2242,
+        name: 'New Name',
+        description: 'Nice Place',
+        price: 448
       }
     ], { validate: true })
   },
@@ -66,7 +78,7 @@ module.exports = {
     options.tableName = 'Spots';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['App Academy', 'App', 'Academy']}
+      name: { [Op.in]: ['App Academy', 'App', 'Academy', 'Yeah', 'Nice Place']}
     }, {})
   }
 };

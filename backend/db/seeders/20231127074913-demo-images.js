@@ -36,6 +36,12 @@ module.exports = {
         imageableType: 'Spot'
       },
       {
+        url: 'another url',
+        preview: false,
+        imageableId: 2,
+        imageableType: 'Spot'
+      },
+      {
         url: 'url5',
         preview: true,
         imageableId: 3,

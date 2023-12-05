@@ -8,26 +8,6 @@ const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
-const validateBooking = [
-    check("startDate")
-        .exists({checkFalsy: true})
-        .withMessage("startDate is required")
-        .custom((value) => {
-            const today = new Date().getTime();
-            if (new Date(value).getTime() < today) {
-              throw new Error('startDate cannot be in the past');
-            }}),
-    check("endDate")
-        .exists({checkFalsy: true})
-        .withMessage("endDate is required")
-        .custom((value, { req }) => {
-            const startDate = req.body.startDate;
-            if (new Date(value) <= new Date(startDate)) {
-              throw new Error('endDate cannot be on or before startDate');
-            }}),
-    handleValidationErrors
-]
-
 const validateReview = [
     check("review")
         .exists({ checkFalsy: true})
@@ -102,16 +82,20 @@ router.get('/', async(req, res, next) => {
 
         delete spot.Reviews;
 
-        spot.Images.forEach(image => {
-            spot.previewImage = image.url
-        })
+        if(spot.Images.length !== 0){
+            spot.Images.forEach(image => {
+                spot.previewImage = image.url
+            })
+        } else {
+            spot.previewImage = "None provided"
+        }
 
         delete spot.Images;
     })
 
     returnData.Spots = spotsList
 
-    res.json(returnData)
+    return res.json(returnData)
 })
 
 router.get('/current', requireAuth, async(req, res, next) => {
@@ -147,20 +131,24 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
         delete spot.Reviews;
 
-        spot.Images.forEach(image => {
-            spot.previewImage = image.url
-        })
+        if(spot.Images.length !== 0){
+            spot.Images.forEach(image => {
+                spot.previewImage = image.url
+            })
+        } else {
+            spot.previewImage = "None provided"
+        }
 
         delete spot.Images;
     })
 
     returnData.Spots = spotsList
 
-    res.json(returnData)
+    return res.json(returnData)
 })
 
-router.get('/:id', async(req, res) => {
-    const id = req.params.id
+router.get('/:spotId', async(req, res) => {
+    const id = req.params.spotId;
 
     let returnData = {}
     let spotList = []
@@ -169,8 +157,14 @@ router.get('/:id', async(req, res) => {
         where:{id},
         include: [
             {model: Review},
-            {model: Image, attributes: {exclude: ['imageableId', 'imageableType', 'createdAt', 'updatedAt']}},
-            {model: User, attributes: {exclude: ['username', 'hashedPassword', 'email', 'createdAt', 'updatedAt']}}
+            {
+                model: Image,
+                attributes: {exclude: ['imageableId', 'imageableType', 'createdAt', 'updatedAt']},
+            },
+            {
+                model: User,
+                attributes: {exclude: ['username', 'hashedPassword', 'email', 'createdAt', 'updatedAt']}
+            }
         ]
     })
 
@@ -245,7 +239,7 @@ router.get('/:spotId/reviews', async(req, res, next) => {
     }
 })
 
-router.get('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
+router.get('/:spotId/bookings', requireAuth,  async(req, res) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
 
@@ -257,7 +251,10 @@ router.get('/:spotId/bookings', requireAuth, validateBooking, async(req, res) =>
 
     const bookings = await Booking.findAll({
         where: {spotId: spot.id},
-        include: {model: User, attributes: {exclude: ['username','createdAt', 'updatedAt', 'email', 'hashedPassword']}}
+        include: {
+            model: User,
+            attributes: {exclude: ['username','createdAt', 'updatedAt', 'email', 'hashedPassword']}
+        }
     })
 
     const bookingsList = [];
@@ -298,11 +295,11 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
         price
     })
 
-    res.json(spot)
+    return res.json(spot)
 })
 
 router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
-    const spotId = Number(req.params.spotId);
+    const spotId = req.params.spotId;
     const userId = req.user.id;
 
     const spot = await Spot.findByPk(spotId)
@@ -320,10 +317,10 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
     let conflict = false;
 
     bookings.forEach(booking => {
-        const existingStartDate = new Date(booking.startDate).getTime()
-        const existingEndDate = new Date(booking.endDate).getTime()
-        const newStartDate = new Date(startDate).getTime()
-        const newEndDate = new Date(endDate).getTime()
+        const existingStartDate = new Date(booking.startDate)
+        const existingEndDate = new Date(booking.endDate)
+        const newStartDate = new Date(startDate)
+        const newEndDate = new Date(endDate)
 
         if(
             newStartDate >= existingStartDate && newStartDate <= existingEndDate ||
@@ -372,7 +369,7 @@ router.post('/:spotId/images', requireAuth, async(req, res) => {
 
         const returnData = await Image.findByPk(image.id, {attributes:{exclude: ['imageableId', 'imageableType', 'createdAt', 'updatedAt']}})
 
-        res.json(returnData)
+        return res.json(returnData)
     } else{
         return res.status(404).json({message: "Spot couldn't be found"})
     }
@@ -380,7 +377,7 @@ router.post('/:spotId/images', requireAuth, async(req, res) => {
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res, next) => {
     const userId = req.user.id;
-    const spotId = Number(req.params.spotId);
+    const spotId = req.params.spotId;
     const { review , stars } = req.body;
 
     const spot = await Spot.findByPk(spotId)
@@ -430,7 +427,6 @@ router.put('/:spotId', requireAuth, validateSpot, async(req, res) => {
         return res.status(404).json({message: "Spot couldn't be found"})
     }
 })
-
 
 router.delete('/:spotId', requireAuth, async(req, res) => {
     const id = req.params.spotId;
