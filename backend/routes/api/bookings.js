@@ -46,8 +46,6 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
     const { startDate, endDate } = req.body;
 
     const booking = await Booking.findByPk(bookingId);
-    const existingStartDate = new Date(booking.startDate);
-    const existingEndDate = new Date(booking.endDate);
     const newStartDate = new Date(startDate);
     const newEndDate = new Date(endDate);
 
@@ -55,12 +53,14 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
         return res.status(404).json({message: "Booking couldn't be found"})
     }
 
+    const existingStartDate = new Date(booking.startDate);
+    const existingEndDate = new Date(booking.endDate);
+
     if(booking.userId !== userId){
         return res.status(403).json({message: 'Forbidden'})
     }
 
     let conflict = false;
-
 
     if(today >= existingEndDate){
         return res.status(403).json({message: "Past bookings can't be modified"})
