@@ -41,6 +41,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
             },
             {
                 model: Image,
+                where: {preview: true},
                 attributes: {exclude: ['preview', 'imageableId', 'imageableType', 'createdAt', 'updatedAt']}
             }
         ]
@@ -52,7 +53,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
     reviewLists.forEach(review => {
         if(review.Spot.Images.length !== 0){
-            review.Spot.previewImage = review.Spot.Images[0].url
+            review.Spot.previewImage = review.Spot.Images
             delete review.Spot.Images
         } else{
             review.Spot.previewImage = 'No Url provided'
