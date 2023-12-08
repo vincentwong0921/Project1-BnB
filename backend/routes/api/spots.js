@@ -187,22 +187,22 @@ router.get('/', validateQuery, async(req, res, next) => {
     let page;
     let size;
 
-    if(req.query.page){
-        page = req.query.page === undefined ? 1 : parseInt(req.query.page);
-        if(page > 10) page = 10;
-        query.offset = size * ( page - 1 );
-    }
-
     if(req.query.size){
         size = req.query.size === undefined ? 20 : parseInt(req.query.size)
         if(size > 20) size = 20;
         query.limit = size;
     }
 
+    if(req.query.page){
+        page = req.query.page === undefined ? 1 : parseInt(req.query.page);
+        if(page > 10) page = 10;
+        query.offset = size * ( page - 1 )
+    }
+
     query.include = [{ model: Review },{ model: Image }]
 
     const spots = await Spot.findAll(
-        query,
+        query
     )
 
     spots.forEach(spot => {
