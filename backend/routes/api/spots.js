@@ -211,6 +211,9 @@ router.get('/', validateQuery, async(req, res, next) => {
 
     spotsList.forEach(spot => {
         let sum = 0
+        spot.lat = Number(spot.lat)
+        spot.lng = Number(spot.lng)
+        spot.price = Number(spot.price)
         spot.Reviews.forEach(review => {
             if(review.stars){
                 sum += review.stars
@@ -263,6 +266,9 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
     spotsList.forEach(spot => {
         let sum = 0
+        spot.lat = Number(spot.lat)
+        spot.lng = Number(spot.lng)
+        spot.price = Number(spot.price)
         spot.Reviews.forEach(review => {
             if(review.stars){
                 sum += review.stars
@@ -318,6 +324,9 @@ router.get('/:spotId', async(req, res) => {
         spotList.push(spot.toJSON())
 
         spotList.forEach(spot => {
+            spot.lat = Number(spot.lat)
+            spot.lng = Number(spot.lng)
+            spot.price = Number(spot.price)
             let sum = 0
             spot.Reviews.forEach(review => {
                 if(review.stars){
