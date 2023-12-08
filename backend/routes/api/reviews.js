@@ -60,6 +60,10 @@ router.get('/current', requireAuth, async(req, res, next) => {
             delete review.Spot.Images
         }
 
+        review.Spot.lat = Number(review.Spot.lat)
+        review.Spot.lng = Number(review.Spot.lng)
+        review.Spot.price = Number(review.Spot.price)
+
         review.ReviewImages = review.Images
         delete review.Images
     })

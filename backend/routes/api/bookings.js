@@ -26,6 +26,10 @@ router.get('/current', requireAuth, async(req, res) => {
     })
 
     bookingsList.forEach(booking => {
+        booking.Spot.lat = Number(booking.Spot.lat)
+        booking.Spot.lng = Number(booking.Spot.lng)
+        booking.Spot.price = Number(booking.Spot.price)
+
         booking.Spot.previewImage = booking.Spot.Images[0].url
         delete booking.Spot.Images
     })
