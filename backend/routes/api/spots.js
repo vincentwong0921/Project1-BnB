@@ -11,9 +11,11 @@ const router = express.Router();
 
 const validateQuery = [
     check("page")
+        .optional()
         .isFloat({min: 1})
         .withMessage("Page must be greater than or equal to 1"),
     check("size")
+        .optional()
         .isFloat({min: 1})
         .withMessage("Size must be greater than or equal to 1"),
     check("minLat")
@@ -179,22 +181,29 @@ router.get('/', validateQuery, async(req, res, next) => {
         }
     }
 
-    let page = req.query.page === undefined ? 1 : parseInt(req.query.page);
-    let size = req.query.size === undefined ? 1 : parseInt(req.query.size)
+    const returnData = {}
+    let spotsList = []
 
-    if(page > 10) page = 10;
-    if(size > 20) size = 20;
+    let page;
+    let size;
 
-    query.limit = size;
-    query.offset = size * ( page - 1 );
+    if(req.query.page){
+        page = req.query.page === undefined ? 1 : parseInt(req.query.page);
+        if(page > 10) page = 10;
+        query.offset = size * ( page - 1 );
+    }
+
+    if(req.query.size){
+        size = req.query.size === undefined ? 20 : parseInt(req.query.size)
+        if(size > 20) size = 20;
+        query.limit = size;
+    }
+
     query.include = [{ model: Review },{ model: Image }]
 
     const spots = await Spot.findAll(
         query,
     )
-
-    const returnData = {}
-    let spotsList = []
 
     spots.forEach(spot => {
         spotsList.push(spot.toJSON())
