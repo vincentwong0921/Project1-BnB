@@ -437,9 +437,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
     let { address, city, state, country, lat, lng, name, description, price } = req.body
     const ownerId = req.user.id
 
-    lat = Number(lat)
-    lng = Number(lng)
-    price = Number(price)
+
 
     const spot = await Spot.create({
         ownerId,
@@ -453,6 +451,10 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
         description,
         price
     })
+
+    spot.lat = Number(lat)
+    spot.lng = Number(lng)
+    spot.price = Number(price)
 
     return res.status(201).json(spot)
 })
