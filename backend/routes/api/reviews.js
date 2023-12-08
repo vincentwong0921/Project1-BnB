@@ -84,8 +84,7 @@ router.post('/:reviewId/images', requireAuth, async(req, res) => {
     } else if(review.userId !== userId){
         return res.status(403).json({message: 'Forbidden'})
     } else {
-        const images = await Image.findAll({where: {imageableId: review.id}})
-
+        const images = await Image.findAll({where: {imageableId: review.id, imageableType: 'Review'}})
         if(images.length >= 10){
             return res.status(403).json({message: "Maximum number of images for this resource was reached"})
         } else {
