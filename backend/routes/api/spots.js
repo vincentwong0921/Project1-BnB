@@ -434,8 +434,12 @@ router.get('/:spotId/bookings', requireAuth,  async(req, res) => {
 })
 
 router.post('/', requireAuth, validateSpot, async(req, res) => {
-    const { address, city, state, country, lat, lng, name, description, price } = req.body
+    let { address, city, state, country, lat, lng, name, description, price } = req.body
     const ownerId = req.user.id
+
+    lat = Number(lat)
+    lng = Number(lng)
+    price = Number(price)
 
     const spot = await Spot.create({
         ownerId,
