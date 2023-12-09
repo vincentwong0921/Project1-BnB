@@ -46,8 +46,6 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
     const { startDate, endDate } = req.body;
 
     const booking = await Booking.findByPk(bookingId);
-    const newStartDate = new Date(startDate);
-    const newEndDate = new Date(endDate);
 
     if(!booking){
         return res.status(404).json({message: "Booking couldn't be found"})
@@ -75,8 +73,9 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
         const existingEndDate = existingBooking.endDate
 
         if(
-            ((newStartDate > existingStartDate && newStartDate < existingEndDate) && (newEndDate > existingStartDate && newEndDate < existingEndDate)) ||
-            (newStartDate < existingStartDate && newEndDate > existingEndDate)
+            ((startDate > existingStartDate && startDate < existingEndDate) && (endDate > existingStartDate && endDate < existingEndDate)) ||
+            (startDate < existingStartDate && endDate > existingEndDate) ||
+            ((startDate === existingStartDate.toISOString().split('T')[0]) && (endDate === existingEndDate.toISOString().split('T')[0]))
         ){
             conflict = true;
             const err = new Error("Sorry, this spot is already booked for the specified dates")
@@ -87,9 +86,9 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
             }
             next(err)
         } else if(
-            newStartDate.toISOString().split('T')[0] === existingStartDate.toISOString().split('T')[0] ||
-            newStartDate.toISOString().split('T')[0] === existingEndDate.toISOString().split('T')[0] ||
-            (newStartDate >= existingStartDate && newStartDate <= existingEndDate)
+            startDate === existingStartDate.toISOString().split('T')[0] ||
+            startDate === existingEndDate.toISOString().split('T')[0] ||
+            (startDate >= existingStartDate && startDate <= existingEndDate)
         ){
             conflict = true;
             const err = new Error("Sorry, this spot is already booked for the specified dates")
@@ -99,9 +98,9 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
             }
             next(err)
         } else if(
-            newEndDate.toISOString().split('T')[0] === existingStartDate.toISOString().split('T')[0] ||
-            newEndDate.toISOString().split('T')[0] === existingEndDate.toISOString().split('T')[0] ||
-            (newEndDate >= existingStartDate && newEndDate <= existingEndDate)
+            endDate === existingStartDate.toISOString().split('T')[0] ||
+            endDate === existingEndDate.toISOString().split('T')[0] ||
+            (endDate >= existingStartDate && endDate <= existingEndDate)
         ){
             conflict = true;
             const err = new Error("Sorry, this spot is already booked for the specified dates")
