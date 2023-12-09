@@ -2,7 +2,7 @@ const express = require("express");
 
 const { requireAuth } = require("../../utils/auth");
 const { User, Spot, Review, Image, Booking } = require("../../db/models");
-
+const { Op } = require('sequelize');
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
@@ -53,31 +53,41 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
         return res.status(404).json({message: "Booking couldn't be found"})
     }
 
-    const existingStartDate = new Date(booking.startDate);
-    const existingEndDate = new Date(booking.endDate);
-
     if(booking.userId !== userId){
         return res.status(403).json({message: 'Forbidden'})
     }
 
+    if(today >= booking.endDate){
+        return res.status(403).json({message: "Past bookings can't be modified"})
+    }
+
+    const existingBookings = await Booking.findAll({
+        where:{
+            spotId: booking.spotId,
+            id: {[Op.ne]: bookingId}
+        },
+    })
+
     let conflict = false;
 
-    if(today >= existingEndDate){
-        return res.status(403).json({message: "Past bookings can't be modified"})
-    } else if(
-        newStartDate >= existingStartDate && newStartDate <= existingEndDate ||
-        newEndDate >= existingStartDate && newEndDate <= existingEndDate ||
-        newStartDate <= existingStartDate && newEndDate >= existingEndDate
-    ){
-        conflict = true;
-        const err = new Error("Sorry, this spot is already booked for the specified dates")
-        err.status = 403;
-        err.errors = {
-            startDate: "Start date conflicts with an existing booking",
-            endDate: "End date conflicts with an existing booking"
+    existingBookings.forEach(existingBooking => {
+        const existingStartDate = existingBooking.startDate
+        const existingEndDate = existingBooking.endDate
+        if(
+            newStartDate >= existingStartDate && newStartDate <= existingEndDate ||
+            newEndDate >= existingStartDate && newEndDate <= existingEndDate ||
+            newStartDate <= existingStartDate && newEndDate >= existingEndDate
+        ){
+            conflict = true;
+            const err = new Error("Sorry, this spot is already booked for the specified dates")
+            err.status = 403;
+            err.errors = {
+                startDate: "Start date conflicts with an existing booking",
+                endDate: "End date conflicts with an existing booking"
+            }
+            next(err)
         }
-        next(err)
-    }
+    })
 
     if(conflict === true){
         return
