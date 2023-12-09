@@ -467,10 +467,9 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
     const spotId = req.params.spotId;
     const userId = req.user.id;
+    const { startDate, endDate } = req.body;
 
     const spot = await Spot.findByPk(spotId)
-    const bookings = await Booking.findAll({where: {spotId: spotId}})
-    const { startDate, endDate } = req.body;
 
     if(!spot){
         return res.status(404).json({message: "Spot couldn't be found"})
@@ -480,25 +479,50 @@ router.post('/:spotId/bookings', requireAuth, async(req, res, next) => {
         return res.status(403).json({message: 'Forbidden'})
     }
 
+    const existingBookings = await Booking.findAll({
+        where:{spotId: spotId}
+    })
 
     let conflict = false;
 
-    bookings.forEach(booking => {
-        const existingStartDate = new Date(booking.startDate)
-        const existingEndDate = new Date(booking.endDate)
-        const newStartDate = new Date(startDate)
-        const newEndDate = new Date(endDate)
+    existingBookings.forEach(existingBooking => {
+        const existingStartDate = existingBooking.startDate.toISOString().split('T')[0]
+        const existingEndDate = existingBooking.endDate.toISOString().split('T')[0]
 
         if(
-            newStartDate >= existingStartDate && newStartDate <= existingEndDate ||
-            newEndDate >= existingStartDate && newEndDate <= existingEndDate ||
-            newStartDate <= existingStartDate && newEndDate >= existingEndDate
+            ((startDate > existingStartDate && startDate < existingEndDate) && (endDate > existingStartDate && endDate < existingEndDate)) ||
+            (startDate < existingStartDate && endDate > existingEndDate) ||
+            ((startDate === existingStartDate) && (endDate === existingEndDate))
         ){
             conflict = true;
             const err = new Error("Sorry, this spot is already booked for the specified dates")
             err.status = 403;
             err.errors = {
                 startDate: "Start date conflicts with an existing booking",
+                endDate: "End date conflicts with an existing booking"
+            }
+            next(err)
+        } else if(
+            startDate === existingStartDate ||
+            startDate === existingEndDate ||
+            (startDate >= existingStartDate && startDate <= existingEndDate)
+        ){
+            conflict = true;
+            const err = new Error("Sorry, this spot is already booked for the specified dates")
+            err.status = 403;
+            err.errors = {
+                startDate: "Start date conflicts with an existing booking",
+            }
+            next(err)
+        } else if(
+            endDate === existingStartDate ||
+            endDate === existingEndDate ||
+            (endDate >= existingStartDate && endDate <= existingEndDate)
+        ){
+            conflict = true;
+            const err = new Error("Sorry, this spot is already booked for the specified dates")
+            err.status = 403;
+            err.errors = {
                 endDate: "End date conflicts with an existing booking"
             }
             next(err)
