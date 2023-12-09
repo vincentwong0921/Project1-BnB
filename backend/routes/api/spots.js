@@ -199,7 +199,7 @@ router.get('/', validateQuery, async(req, res, next) => {
         query.offset = size * ( page - 1 )
     }
 
-    query.include = [{ model: Review },{ model: Image }]
+    query.include = [{ model: Review },{ model: Image, where: {preview: true} }]
 
     const spots = await Spot.findAll(
         query

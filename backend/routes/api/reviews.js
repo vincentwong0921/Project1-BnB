@@ -53,7 +53,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
 
     reviewLists.forEach(review => {
         if(review.Spot.Images.length !== 0){
-            review.Spot.previewImage = review.Spot.Images
+            review.Spot.previewImage = review.Spot.Images[0].url
             delete review.Spot.Images
         } else{
             review.Spot.previewImage = 'No Url provided'
