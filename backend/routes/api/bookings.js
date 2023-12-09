@@ -73,16 +73,40 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
     existingBookings.forEach(existingBooking => {
         const existingStartDate = existingBooking.startDate
         const existingEndDate = existingBooking.endDate
+
         if(
-            newStartDate >= existingStartDate && newStartDate <= existingEndDate ||
-            newEndDate >= existingStartDate && newEndDate <= existingEndDate ||
-            newStartDate <= existingStartDate && newEndDate >= existingEndDate
+            ((newStartDate > existingStartDate && newStartDate < existingEndDate) && (newEndDate > existingStartDate && newEndDate < existingEndDate)) ||
+            (newStartDate < existingStartDate && newEndDate > existingEndDate)
         ){
             conflict = true;
             const err = new Error("Sorry, this spot is already booked for the specified dates")
             err.status = 403;
             err.errors = {
                 startDate: "Start date conflicts with an existing booking",
+                endDate: "End date conflicts with an existing booking"
+            }
+            next(err)
+        } else if(
+            newStartDate.toISOString().split('T')[0] === existingStartDate.toISOString().split('T')[0] ||
+            newStartDate.toISOString().split('T')[0] === existingEndDate.toISOString().split('T')[0] ||
+            (newStartDate >= existingStartDate && newStartDate <= existingEndDate)
+        ){
+            conflict = true;
+            const err = new Error("Sorry, this spot is already booked for the specified dates")
+            err.status = 403;
+            err.errors = {
+                startDate: "Start date conflicts with an existing booking",
+            }
+            next(err)
+        } else if(
+            newEndDate.toISOString().split('T')[0] === existingStartDate.toISOString().split('T')[0] ||
+            newEndDate.toISOString().split('T')[0] === existingEndDate.toISOString().split('T')[0] ||
+            (newEndDate >= existingStartDate && newEndDate <= existingEndDate)
+        ){
+            conflict = true;
+            const err = new Error("Sorry, this spot is already booked for the specified dates")
+            err.status = 403;
+            err.errors = {
                 endDate: "End date conflicts with an existing booking"
             }
             next(err)
