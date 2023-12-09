@@ -69,13 +69,13 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
     let conflict = false;
 
     existingBookings.forEach(existingBooking => {
-        const existingStartDate = existingBooking.startDate
-        const existingEndDate = existingBooking.endDate
+        const existingStartDate = existingBooking.startDate.toISOString().split('T')[0]
+        const existingEndDate = existingBooking.endDate.toISOString().split('T')[0]
 
         if(
             ((startDate > existingStartDate && startDate < existingEndDate) && (endDate > existingStartDate && endDate < existingEndDate)) ||
             (startDate < existingStartDate && endDate > existingEndDate) ||
-            ((startDate === existingStartDate.toISOString().split('T')[0]) && (endDate === existingEndDate.toISOString().split('T')[0]))
+            ((startDate === existingStartDate) && (endDate === existingEndDate))
         ){
             conflict = true;
             const err = new Error("Sorry, this spot is already booked for the specified dates")
@@ -86,8 +86,8 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
             }
             next(err)
         } else if(
-            startDate === existingStartDate.toISOString().split('T')[0] ||
-            startDate === existingEndDate.toISOString().split('T')[0] ||
+            startDate === existingStartDate ||
+            startDate === existingEndDate ||
             (startDate >= existingStartDate && startDate <= existingEndDate)
         ){
             conflict = true;
@@ -98,8 +98,8 @@ router.put('/:bookingId', requireAuth, async(req, res, next) => {
             }
             next(err)
         } else if(
-            endDate === existingStartDate.toISOString().split('T')[0] ||
-            endDate === existingEndDate.toISOString().split('T')[0] ||
+            endDate === existingStartDate ||
+            endDate === existingEndDate ||
             (endDate >= existingStartDate && endDate <= existingEndDate)
         ){
             conflict = true;
