@@ -199,7 +199,7 @@ router.get('/', validateQuery, async(req, res, next) => {
         query.offset = size * ( page - 1 )
     }
 
-    query.include = [{ model: Review },{ model: Image, where: {preview: true} }]
+    query.include = [{ model: Review },{ model: Image }]
 
     const spots = await Spot.findAll(
         query
@@ -230,7 +230,12 @@ router.get('/', validateQuery, async(req, res, next) => {
 
         if(spot.Images.length !== 0){
             spot.Images.forEach(image => {
-                spot.previewImage = image.url
+                console.log(image)
+                if(image.preview === true){
+                    spot.previewImage = image.url
+                } else{
+                    spot.previewImage = "None provided"
+                }
             })
         } else {
             spot.previewImage = "None provided"
