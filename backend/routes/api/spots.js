@@ -171,7 +171,7 @@ router.get('/', validateQuery, async(req, res, next) => {
     }
 
     if(minPrice && maxPrice){
-        if(minPrice > maxPrice){
+        if(Number(minPrice) > Number(maxPrice)){
             const err = new Error("Bad Request")
             err.status = 400;
             err.errors = ["Min Price cannot be greater than Max Price"]
@@ -230,7 +230,6 @@ router.get('/', validateQuery, async(req, res, next) => {
 
         if(spot.Images.length !== 0){
             spot.Images.forEach(image => {
-                console.log(image)
                 if(image.preview === true){
                     spot.previewImage = image.url
                 } else{
