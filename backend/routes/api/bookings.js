@@ -10,19 +10,19 @@ const router = express.Router();
 
 const validateBooking = [
     check('startDate')
-        .exists({ checkFalsy: true })
         .custom(value => {
             const today = new Date()
             if (new Date(value) < today) {
               throw err = new Error('startDate cannot be in the past');
             }
+            return true
         }),
     check('endDate')
-        .exists({ checkFalsy: true})
         .custom((value, {req})=> {
             if (new Date(value) <= new Date(req.body.startDate)) {
                 throw new Error("endDate cannot be on or before startDate");
-              }
+            }
+            return true
         }),
     handleValidationErrors
 ];
