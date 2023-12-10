@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, ValidationError } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
@@ -35,12 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false,
       validate: {
         isDate: true,
-        isAfterToday(value){
-          const today = new Date()
-          if (new Date(value) < today) {
-            throw new Error('startDate cannot be in the past')
-          }
-        }
       }
     },
     endDate: {
@@ -48,11 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false,
       validate: {
         isDate: true,
-        isAfterStartDate(value){
-          if (new Date(value) <= new Date(this.startDate)) {
-            throw new Error("endDate cannot be on or before startDate");
-          }
-        }
       }
     }
   }, {

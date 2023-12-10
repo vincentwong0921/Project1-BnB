@@ -9,6 +9,25 @@ const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
+const validateBooking = [
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .custom(value => {
+            const today = new Date()
+            if (new Date(value) < today) {
+              throw err = new Error('startDate cannot be in the past');
+            }
+        }),
+    check('endDate')
+        .exists({ checkFalsy: true})
+        .custom((value, {req})=> {
+            if (new Date(value) <= new Date(req.body.startDate)) {
+                throw new Error("endDate cannot be on or before startDate");
+              }
+        }),
+    handleValidationErrors
+];
+
 const validateQuery = [
     check("page")
         .optional()
@@ -398,7 +417,7 @@ router.get('/:spotId/reviews', async(req, res, next) => {
     }
 })
 
-router.get('/:spotId/bookings', requireAuth,  async(req, res) => {
+router.get('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
     const userId = req.user.id;
     const spotId = req.params.spotId;
 
@@ -440,8 +459,6 @@ router.get('/:spotId/bookings', requireAuth,  async(req, res) => {
 router.post('/', requireAuth, validateSpot, async(req, res) => {
     let { address, city, state, country, lat, lng, name, description, price } = req.body
     const ownerId = req.user.id
-
-
 
     const spot = await Spot.create({
         ownerId,
