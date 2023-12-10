@@ -610,7 +610,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res, nex
             res.status(500).json({message: "User already has a review for this spot"})
         }
     } else{
-        return res.status(400).json({message: "Spot couldn't be found"})
+        return res.status(404).json({message: "Spot couldn't be found"})
     }
 })
 
