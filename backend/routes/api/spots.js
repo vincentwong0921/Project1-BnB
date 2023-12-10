@@ -130,9 +130,12 @@ const validateSpot = [
     .exists({ checkFalsy: true })
     .isLength({ max: 49 })
     .withMessage("Name must be less than 50 characters"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true})
-    .isDecimal({ min: 0 })
+    .isFloat({ min: 0 })
     .withMessage('Price per day must be a positive number'),
   handleValidationErrors,
 ]
@@ -360,9 +363,9 @@ router.get('/:spotId', async(req, res) => {
             let length = spot.Reviews.length
 
             if(sum !== 0){
-                spot.avgRating = sum / spot.Reviews.length
+                spot.avgStarRating = sum / spot.Reviews.length
             } else{
-                spot.avgRating = 0
+                spot.avgStarRating = 0
             }
 
             delete spot.Reviews;
