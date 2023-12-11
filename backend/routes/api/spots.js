@@ -155,7 +155,7 @@ router.get('/', validateQuery, async(req, res, next) => {
     }
 
     if(minLat && maxLat){
-        if(minLat > maxLat){
+        if(Number(minLat) > Number(maxLat)){
             const err = new Error("Bad Request")
             err.status = 400;
             err.errors = ["Min Lat cannot be greater than Max Lat"]
@@ -174,7 +174,7 @@ router.get('/', validateQuery, async(req, res, next) => {
     }
 
     if(minLng && maxLng){
-        if(minLng > maxLng){
+        if(Number(minLng) > Number(maxLng)){
             const err = new Error("Bad Request")
             err.status = 400;
             err.errors = ["Min Lng cannot be greater than Max Lng"]
