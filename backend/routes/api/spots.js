@@ -77,7 +77,7 @@ const validateQuery = [
         .optional()
         .isDecimal()
         .custom(value => {
-            if(Number(value) < 0){
+            if(!value || Number(value) < 0){
                 throw new Error("Minimum price must be greater than or equal to 0")
             }
             return true;
@@ -86,7 +86,7 @@ const validateQuery = [
         .optional()
         .isDecimal()
         .custom(value => {
-            if(Number(value) < 0){
+            if(!value || Number(value) < 0){
                 throw new Error("Maximum price must be greater than or equal to 0")
             }
             return true;
