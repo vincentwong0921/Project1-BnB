@@ -41,7 +41,7 @@ const validateQuery = [
         .isDecimal({min: -90})
         .optional()
         .custom(value => {
-            if(value < -90){
+            if(!value || Number(value) < -90 || Number(value) > 90){
                 throw new Error("Minimum latitude is invalid")
             }
             return true;
@@ -50,7 +50,7 @@ const validateQuery = [
         .isDecimal({max: 90})
         .optional()
         .custom(value => {
-            if(value > 90){
+            if(!value || Number(value) < -90 || Number(value) > 90){
                 throw new Error("Maximum latitude is invalid")
             }
             return true;
@@ -59,7 +59,7 @@ const validateQuery = [
         .isDecimal({min: -180})
         .optional()
         .custom(value => {
-            if(value < -180){
+            if(!value || Number(value) < -180 || Number(value) > 180){
                 throw new Error("Minimum longitude is invalid")
             }
             return true;
@@ -68,7 +68,7 @@ const validateQuery = [
         .isDecimal({max: 180})
         .optional()
         .custom(value => {
-            if(value > 180){
+            if(!value || Number(value) > 180 || Number(value) < -180){
                 throw new Error("Maximum longitude is invalid")
             }
             return true;
@@ -77,7 +77,7 @@ const validateQuery = [
         .optional()
         .isDecimal()
         .custom(value => {
-            if(value < 0){
+            if(Number(value) < 0){
                 throw new Error("Minimum price must be greater than or equal to 0")
             }
             return true;
@@ -86,7 +86,7 @@ const validateQuery = [
         .optional()
         .isDecimal()
         .custom(value => {
-            if(value < 0){
+            if(Number(value) < 0){
                 throw new Error("Maximum price must be greater than or equal to 0")
             }
             return true;
