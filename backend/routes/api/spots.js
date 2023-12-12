@@ -30,20 +30,22 @@ const validateBooking = [
 
 const validateQuery = [
     check("page")
+        .optional()
         .isFloat({min: 1})
         .withMessage("Page must be greater than or equal to 1"),
     check("size")
+        .optional()
         .isFloat({min: 1})
         .withMessage("Size must be greater than or equal to 1"),
     check("minLat")
         .isDecimal({min: -90})
+        .optional()
         .custom(value => {
             if(!value || Number(value) < -90 || Number(value) > 90){
                 throw new Error("Minimum latitude is invalid")
             }
             return true;
-        })
-        .optional(),
+        }),
     check("maxLat")
         .isDecimal({max: 90})
         .optional()
