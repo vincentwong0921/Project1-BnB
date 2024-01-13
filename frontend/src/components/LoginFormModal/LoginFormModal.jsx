@@ -1,33 +1,33 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as sessionActions from '../../store/session'
-import { Navigate } from "react-router-dom";
-import './LoginFormPage.css'
+import './LoginFormModal.css'
+import { useModal } from "../../context/Modal";
 
-const LoginFormPage = () => {
+const LoginFormModal = () => {
   const [credential, setCredential] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState({})
-  const currentUser = useSelector(state => state.session.user)
   const dispatch = useDispatch()
-
-  if(currentUser) return <Navigate to={'/'} replace={true} />
+  const { closeModal } = useModal()
 
   const handleSubmit = e => {
     e.preventDefault()
     setErrors({});
-    return dispatch(sessionActions.loginUser({credential, password})).catch(
-        async (res) => {
+    return dispatch(sessionActions.loginUser({credential, password}))
+    .then(closeModal)
+    .catch( async (res) => {
             const data = await res.json()
             if(data?.errors) setErrors(data.errors)
-        }
-    )
+            }
+          )
   }
 
   return (
     <>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
+
         <label>
           Username or Email
           <input
@@ -37,6 +37,7 @@ const LoginFormPage = () => {
             required
           />
         </label>
+
         <label>
           Password
           <input
@@ -46,11 +47,13 @@ const LoginFormPage = () => {
             required
           />
         </label>
+
         {errors.credential && <p>{errors.credential}</p>}
+
         <button type="submit">Log In</button>
       </form>
     </>
   );
 };
 
-export default LoginFormPage;
+export default LoginFormModal;
