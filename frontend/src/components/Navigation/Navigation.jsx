@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import LoginFormModal from '../LoginFormModal/LoginFormModal'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
+import SignupFormModal from '../SignupFormPage/SignupFormModal'
 
 const Navigation = ({ isLoaded }) => {
     const sessionUser = useSelector(state => state.session.user)
@@ -23,7 +24,10 @@ const Navigation = ({ isLoaded }) => {
                 />
             </li>
             <li>
-                <NavLink to={'/signup'}>Sign Up</NavLink>
+                <OpenModalButton
+                    buttonText='Sign Up'
+                    modalComponent={<SignupFormModal/>}
+                />
             </li>
         </>
     )
