@@ -21,3 +21,7 @@ a {
   color: #333;
   font-weight: bold;
 }
+
+.hidden{
+  display: none;
+}
