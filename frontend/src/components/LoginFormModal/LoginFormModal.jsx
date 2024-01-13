@@ -18,9 +18,9 @@ const LoginFormModal = () => {
     .then(closeModal)
     .catch( async (res) => {
             const data = await res.json()
-            if(data?.errors) setErrors(data.errors)
+            if(data?.message) setErrors({message: data.message})
             }
-          )
+    )
   }
 
   return (
@@ -48,7 +48,7 @@ const LoginFormModal = () => {
           />
         </label>
 
-        {errors.credential && <p>{errors.credential}</p>}
+        {errors.message && <p>{errors.message}</p>}
 
         <button type="submit">Log In</button>
       </form>
