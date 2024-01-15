@@ -1,1 +1,111 @@
 /* TODO: Add sitewide styles */
+.hidden {
+  display: none;
+}
+
+.fa-id-card {
+  font-size: 30px;
+  cursor: pointer;
+  right: 10px;
+  top: 25px;
+  margin-right: 15px;
+}
+
+.navi {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  min-width: 700px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  height: 35px;
+}
+
+.leftlogo, .leftlogo > a {
+  font-size: 25px;
+  color: orangered;
+  text-decoration: none;
+}
+
+.rightlogo {
+  align-items: center;
+  margin-left: auto;
+  font-size: 25px;
+}
+
+.rightlogo > a {
+  margin-right: 30px;
+  text-decoration: none;
+  color: darkblue;
+}
+
+li {
+  list-style-type: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  width: auto;
+  min-width: 700px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.newspotaddress {
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.spotdes, .spottitle, .spotprice, .spoturl {
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.createbutton {
+  margin-top: 10px;
+}
+
+.spotbutton {
+  background-color: orangered;
+  color: white;
+  box-shadow: 2px 2px 2px black
+}
+
+.emailcontainer {
+  border-bottom: 1px solid black;
+}
+
+.spotimage {
+  width: 400px;
+  height: 400px;
+}
+
+.spotshow {
+  margin-top: 10px;
+  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.citystaterating {
+  display: flex;
+  justify-content: space-between;
+}
+
+.spotsbox {
+  padding: 0 10px;
+}
+
+.profile-dropdown {
+  border: 1px solid black;
+}
+
+.loginbutton {
+  background-color: orangered;
+  color: white;
+  box-shadow: 2px 2px 2px black
+}

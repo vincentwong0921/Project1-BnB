@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as sessionActions from '../../store/session'
-import './LoginForm.css'
 import { useModal } from "../../context/Modal";
 
 const LoginFormModal = () => {
@@ -23,10 +22,21 @@ const LoginFormModal = () => {
     )
   }
 
+  const demoClick = e => {
+    e.preventDefault()
+    return dispatch(sessionActions.loginUser({
+      credential: "Demo-lition",
+      password: "password"
+    }))
+    .then(closeModal)
+  }
+
   return (
     <>
-      <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
+      <h1>Log In</h1>
+
+        {errors.message && <p>{errors.message}</p>}
 
         <label>
           Username or Email
@@ -48,9 +58,14 @@ const LoginFormModal = () => {
           />
         </label>
 
-        {errors.message && <p>{errors.message}</p>}
+        <button
+          type="submit"
+          className="loginbutton"
+          disabled = {Object.values(errors).length}
+        >Log In</button>
 
-        <button type="submit">Log In</button>
+        <a href="/" onClick={demoClick}>Demo User</a>
+
       </form>
     </>
   );

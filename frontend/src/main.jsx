@@ -7,6 +7,7 @@ import configureStore from './store';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import * as sessionActions from './store/session'
 import { ModalProvider, Modal } from './context/Modal';
+import * as spotsActions from './store/spots'
 
 const store = configureStore();
 
@@ -20,6 +21,7 @@ if (import.meta.env.MODE !== 'production') {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions
+  window.spotsActions = spotsActions
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -32,3 +34,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </ModalProvider>
   </React.StrictMode>
 );
+
+

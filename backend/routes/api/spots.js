@@ -389,7 +389,6 @@ router.get('/:spotId', async(req, res) => {
 
 router.get('/:spotId/reviews', async(req, res, next) => {
     const id = req.params.spotId;
-
     const spot = await Spot.findByPk(id)
 
     if(spot){
