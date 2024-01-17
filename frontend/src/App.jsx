@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     element: <Layout/>,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <SpotsIndex/>
       },
       {
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <SpotShow/>
       },
       {
-        path: 'spots/new',
+        path: '/spots/new',
         element: <CreateNewSpot/>
       }
     ]

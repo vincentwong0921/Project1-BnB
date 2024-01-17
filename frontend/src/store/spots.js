@@ -47,10 +47,28 @@ export const getOneSpot = spotId => async(dispatch) => {
         dispatch(receiveSpot(spotDetail))
     } else {
         const error = await response.json()
+        console.log(error)
         return error
     }
 }
 
+export const createSpot = spot => async(dispatch) => {
+    const response = await csrfFetch('/api/spots', {
+        method: 'POST',
+        body: JSON.stringify(spot)
+    })
+
+    console.log(response)
+
+    if(response.ok){
+        const newSpot = await response.json()
+        dispatch(receiveSpot(newSpot))
+        return newSpot
+    } else {
+        const error = await response.json()
+        return error
+    }
+}
 
 
 

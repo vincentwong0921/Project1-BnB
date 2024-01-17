@@ -1,42 +1,51 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
+import { createSpot } from "../../store/spots"
 
 const CreateNewSpot = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [country, setCountry] = useState('Country')
-    const [streetAddress, setStreetAddress] = useState('Address')
-    const [city, setCity] = useState('City')
-    const [state, setState] = useState('STATE')
-    const [lat, setLat] = useState('Latitude')
-    const [lng, setLng] = useState('Longitude')
-    const [des, setDes] = useState('Please write at least 30 characters')
-    const [title, setTitle] = useState('Name of your spot')
-    const [price, setPrice] = useState('Price per night (USD)')
-    const [preUrl, setPreUrl] = useState('Preview Image URL')
-    const [url1, setUrl1] = useState('Image URL')
-    const [url2, setUrl2] = useState('Image URL')
-    const [url3, setUrl3] = useState('Image URL')
-    const [url4, setUrl4] = useState('Image URL')
+    const [country, setCountry] = useState('')
+    const [address, setAddress] = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [lat, setLat] = useState('')
+    const [lng, setLng] = useState('')
+    const [description, setDescription] = useState('')
+    const [name, setName] = useState('')
+    const [price, setPrice] = useState('')
+    const [preUrl, setPreUrl] = useState('')
+    const [url1, setUrl1] = useState('')
+    const [url2, setUrl2] = useState('')
+    const [url3, setUrl3] = useState('')
+    const [url4, setUrl4] = useState('')
+    const [error, setError] = useState({})
 
     const reset = () => {
-
+        setCountry(''), setAddress(''), setCity(''), setState(''), setLat(''), setLng(''), setDescription(''), setName(''), setPreUrl(''), setUrl1(''), setUrl2(''), setUrl3(''), setUrl4('')
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault()
-        const newSpot = { country, streetAddress, city, state, lat, lng, des, title, price, preUrl, url1, url2, url3, url4 }
+        const newSpot = { country, address, city, state, description, name, price }
+        if(lat !== undefined && lng !== undefined){
+            newSpot.lat = lat
+            newSpot.lng = lng
+        }
 
+        const createdSpot = await dispatch(createSpot(newSpot))
 
+        navigate(`/api/spots/${createdSpot.id}`)
         reset()
     }
 
     return(
         <form onSubmit={handleSubmit}>
             <h2>Create a new Spot</h2>
-            <h4>Where's your place located?</h4>
-            Guests will only get your exact address once they booked a reservation.<br></br>
+            <h4>Where&apos;s your place located?</h4>
+            <p>Guests will only get your exact address once they booked a reservation.</p>
+
             <div className="newspotaddress">
                 <label>
                     Country
@@ -44,6 +53,7 @@ const CreateNewSpot = () => {
                         type="text"
                         value={country}
                         onChange={e => setCountry(e.target.value)}
+                        placeholder="Country"
                         required
                     />
                 </label>
@@ -51,8 +61,9 @@ const CreateNewSpot = () => {
                     Street Address
                     <input
                         type="text"
-                        value={streetAddress}
-                        onChange={e => setStreetAddress(e.target.value)}
+                        value={address}
+                        onChange={e => setAddress(e.target.value)}
+                        placeholder="Address"
                         required
                     />
                 </label>
@@ -62,6 +73,7 @@ const CreateNewSpot = () => {
                         type="text"
                         value={city}
                         onChange={e => setCity(e.target.value)}
+                        placeholder="City"
                         required
                     />
                 </label>
@@ -71,6 +83,7 @@ const CreateNewSpot = () => {
                         type="text"
                         value={state}
                         onChange={e => setState(e.target.value)}
+                        placeholder="STATE"
                         required
                     />
                 </label>
@@ -80,6 +93,7 @@ const CreateNewSpot = () => {
                         type="text"
                         value={lat}
                         onChange={e => setLat(e.target.value)}
+                        placeholder="Latitude"
                     />
                 </label>
                 <label>
@@ -88,6 +102,7 @@ const CreateNewSpot = () => {
                         type="text"
                         value={lng}
                         onChange={e => setLng(e.target.value)}
+                        placeholder="Longitude"
                     />
                 </label>
             </div>
@@ -97,21 +112,23 @@ const CreateNewSpot = () => {
                 Mention the best features of your space, any special amentities like fast wife or parking, and what you love about the neighborhood.
                 <label>
                     <textarea
-                        value={des}
-                        onChange={e => setDes(e.target.value)}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
                         required
+                        placeholder="Please write at least 30 characters"
                     />
                 </label>
             </div>
 
             <div className="spottitle">
                 <h4>Create a title for your spot</h4>
-                Catch guests' attention with a spot title that highlights what makes your place special
+                <p>Catch guest&apos;s attention with a spot title that highlights what makes your place special</p>
                 <label>
                     <input
                         type="text"
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        placeholder="Name of your spot"
                         required
                     />
                 </label>
@@ -126,6 +143,7 @@ const CreateNewSpot = () => {
                         type="text"
                         value={price}
                         onChange={e => setPrice(e.target.value)}
+                        placeholder="Price per night(USD)"
                         required
                     />
                 </label>
@@ -138,23 +156,28 @@ const CreateNewSpot = () => {
                     type="text"
                     value={preUrl}
                     onChange={e => setPreUrl(e.target.value)}
+                    placeholder="Preview Image URL"
                 />
                 <input
                     type="text"
                     value={url1}
                     onChange={e => setUrl1(e.target.value)}
+                    placeholder="Image URL"
                 />
                 <input
                     value={url2}
                     onChange={e => setUrl2(e.target.value)}
+                    placeholder="Image URL"
                 />
                 <input
                     value={url3}
                     onChange={e => setUrl3(e.target.value)}
+                    placeholder="Image URL"
                 />
                 <input
                     value={url4}
                     onChange={e => setUrl4(e.target.value)}
+                    placeholder="Image URL"
                 />
             </div>
 
