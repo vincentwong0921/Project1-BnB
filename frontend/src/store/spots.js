@@ -58,8 +58,6 @@ export const createSpot = spot => async(dispatch) => {
         body: JSON.stringify(spot)
     })
 
-    console.log(response)
-
     if(response.ok){
         const newSpot = await response.json()
         dispatch(receiveSpot(newSpot))

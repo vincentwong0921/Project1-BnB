@@ -13,12 +13,12 @@ export const loadAllReviews = reviews => ({
 
 export const receiveReview = review => ({
     type: RECEIVE_REVIEW,
-    spot
+    review
 })
 
 export const editReview = review => ({
     type: UPDATE_REVIEW,
-    spot
+    review
 })
 
 export const deleteReview = reviewId => ({
