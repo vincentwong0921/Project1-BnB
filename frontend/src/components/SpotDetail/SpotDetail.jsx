@@ -98,7 +98,7 @@ const SpotDetail = () => {
             {spot.avgStarRating} {spot.numReviews} reviews
             <ul>
               {reviews.map((review) => (
-                <div>
+                <div key={review.id}>
                   <li key={review.id}>
                     {review.User.firstName}
                     {formatDate(review.createdAt)}
