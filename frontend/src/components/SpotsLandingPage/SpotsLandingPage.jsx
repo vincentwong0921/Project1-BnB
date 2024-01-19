@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { getAllSpots } from '../../store/spots'
 import SpotIndexItem from '../SpotIndexItem/SpotIndexItem'
 
-const SpotsIndex = () => {
+const SpotsLandingPage = () => {
     const spots = Object.values(useSelector(state => state.spots ? state.spots : null))
     const dispatch = useDispatch()
 
@@ -26,4 +26,4 @@ const SpotsIndex = () => {
 }
 
 
-export default SpotsIndex
+export default SpotsLandingPage

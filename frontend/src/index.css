@@ -8,7 +8,11 @@
   cursor: pointer;
   right: 10px;
   top: 25px;
-  margin-right: 15px;
+
+}
+
+.Spot-Info {
+  border-bottom: 1px solid black;
 }
 
 .navi {
@@ -29,9 +33,7 @@
 }
 
 .rightlogo {
-  align-items: center;
-  margin-left: auto;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .rightlogo > a {
@@ -44,34 +46,55 @@ li {
   list-style-type: none;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 10px;
-  width: auto;
-  min-width: 700px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 .newspotaddress {
   padding-bottom: 10px;
   border-bottom: 1px solid black;
 }
 
-.spotdes, .spottitle, .spotprice, .spoturl {
-  padding-bottom: 10px;
+.citystate,
+.latlng,
+.spotdes,
+.spottitle,
+.spotprice,
+.spoturl {
   border-bottom: 1px solid black;
+}
+
+.citystate{
+  margin-bottom: 15px;
+}
+
+.citystate label,
+.latlng label,
+.spotdes label,
+.spottitle label,
+.spotprice label,
+.spoturl label {
+  display: block;
+}
+
+.latlng label,
+.citystate label {
+  width: 48%;
+}
+
+.latlng,
+.citystate {
+  display: flex;
+  justify-content: space-between;
 }
 
 .createbutton {
   margin-top: 10px;
 }
 
-.spotbutton {
+.spotbutton, .reservebutton, .loginbutton, .signupbutton {
   background-color: orangered;
   color: white;
-  box-shadow: 2px 2px 2px black
+  box-shadow: 3px 3px 3px black;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
 }
 
 .emailcontainer {
@@ -84,7 +107,7 @@ form {
 }
 
 .spotshow {
-  margin-top: 10px;
+  margin-top: 120px;
   gap: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -101,16 +124,71 @@ form {
 }
 
 .profile-dropdown {
-  border: 1px solid black;
-}
-
-.loginbutton {
-  background-color: orangered;
-  color: white;
-  box-shadow: 2px 2px 2px black
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 180px;
+  height: 100px;
+  font-size: 20px;
 }
 
 .errormsg {
   color: red;
   font-weight: bold;
+}
+
+.managespotlink {
+  text-decoration: none;
+  border-bottom: 1px solid black;
+}
+
+.logoutbutton {
+  background-color: grey;
+  color: white;
+  height: 25px;
+  width: 100px;
+  border-radius: 25px;
+}
+
+.createspotform {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+
+.city-state-input {
+  flex: 0 0 48%;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+
+.signupform, .loginform {
+  border-radius: 5px;
+  padding: 20px;
+}
+
+input[type=text], input[type=password], textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid lightblue;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+.logindemo, .signup{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spotprice label {
+  display: flex;
+  align-items: center;
+}
+
+.spotprice span {
+  margin-right: 5px;
 }

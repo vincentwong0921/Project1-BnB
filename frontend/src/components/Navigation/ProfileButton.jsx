@@ -4,7 +4,7 @@ import * as sessionActions from '../../store/session'
 import LoginFormModal from '../LoginFormModal/LoginFormModal'
 import SignupFormModal from "../SignupFormPage/SignupFormModal";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const ProfileButton = ({ user }) => {
@@ -16,6 +16,10 @@ const ProfileButton = ({ user }) => {
     const toggleMenu = e => {
         e.stopPropagation()
         setShowMenu(!showMenu)
+    }
+
+    const navigateToHome = () => {
+        navigate('/')
     }
 
     useEffect(() => {
@@ -57,7 +61,13 @@ const ProfileButton = ({ user }) => {
                             <li>Hello, {user.username}</li>
                             <li className="emailcontainer">{user.email}</li>
                             <li>
-                                <button onClick={logout}>Logout</button>
+                                <Link className="managespotlink">Manage Spots</Link>
+                            </li>
+                            <li>
+                                <button
+                                 onClick={logout}
+                                 className="logoutbutton"
+                                >Logout</button>
                             </li>
                         </div>
                     </>
@@ -68,7 +78,7 @@ const ProfileButton = ({ user }) => {
                                 <OpenModalButton
                                     buttonText='Log In'
                                     onButtonClick={closeMenu}
-                                    modalComponent={<LoginFormModal/>}
+                                    modalComponent={<LoginFormModal navigateToHome={navigateToHome}/>}
                                 />
                             </div>
 

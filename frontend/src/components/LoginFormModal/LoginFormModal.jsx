@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import * as sessionActions from '../../store/session'
 import { useModal } from "../../context/Modal";
 
-const LoginFormModal = () => {
+const LoginFormModal = ({navigateToHome}) => {
   const [credential, setCredential] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState({})
@@ -21,31 +21,35 @@ const LoginFormModal = () => {
     setErrors(errs)
   }, [credential, password])
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    // navigate('/')
+  const handleSubmit = async e => {
+    e.preventDefault();
     setErrors({});
-    return dispatch(sessionActions.loginUser({credential, password}))
-    .then(closeModal)
-    .catch( async (res) => {
-            const data = await res.json()
-            if(data?.message) setErrors({message: "The provided credentials were invalid"})
-            }
-    )
-  }
 
-  const demoClick = e => {
+    try {
+      await dispatch(sessionActions.loginUser({ credential, password }));
+      closeModal();
+      navigateToHome();
+    } catch (res) {
+      const data = await res.json();
+      if (data?.message) {
+        setErrors({ message: "The provided credentials were invalid" });
+      }
+    }
+  };
+
+  const demoClick = async e => {
     e.preventDefault()
-    return dispatch(sessionActions.loginUser({
+    await dispatch(sessionActions.loginUser({
       credential: "Demo-lition",
       password: "password"
     }))
-    .then(closeModal)
+    closeModal()
+    navigateToHome();
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form className="loginform" onSubmit={handleSubmit}>
       <h1>Log In</h1>
 
         {errors.message && <div className="errormsg">{errors.message}</div>}
@@ -70,13 +74,16 @@ const LoginFormModal = () => {
           />
         </label>
 
-        <button
-          type="submit"
-          className="loginbutton"
-          disabled = {Object.values(errors).length}
-        >Log In</button>
+        <div className="logindemo">
+          <button
+            type="submit"
+            className="loginbutton"
+            disabled = {Object.values(errors).length}
+          >
+            Log In</button>
 
-        <a href="/" onClick={demoClick}>Demo User</a>
+          <a href="/" onClick={demoClick}>Demo User</a>
+        </div>
 
       </form>
     </>

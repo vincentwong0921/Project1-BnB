@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import * as sessionActions from './store/session'
 import { useDispatch } from "react-redux";
 import Navigation from "./components/Navigation/Navigation";
-import SpotsIndex from "./components/SpotsIndex/SpotsIndex";
-import SpotShow from "./components/SpotShow/SpotShow";
+import SpotsLandingPage from "./components/SpotsLandingPage/SpotsLandingPage";
 import CreateNewSpot from "./components/Navigation/CreateNewSpot";
+import SpotDetail from "./components/SpotDetail/SpotDetail";
 import './index.css'
 
 const Layout = () => {
@@ -32,11 +32,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <SpotsIndex/>
+        element: <SpotsLandingPage/>
       },
       {
         path: '/spots/:spotId',
-        element: <SpotShow/>
+        element: <SpotDetail/>
       },
       {
         path: '/spots/new',
