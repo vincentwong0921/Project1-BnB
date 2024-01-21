@@ -8,13 +8,11 @@
   cursor: pointer;
   right: 50px;
   top: 20px;
-  position: fixed;
 }
 
 .id-card {
   font-size: 30px;
   cursor: pointer;
-  position: fixed;
   right: 65px;
   top: 30px;
 }
@@ -41,7 +39,6 @@
   padding: 15px;
   display: flex;
   justify-content: space-between;
-  position: relative;
   min-width: 700px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   height: 35px;
@@ -56,7 +53,6 @@
 
 .rightlogo {
   font-size: 20px;
-  position: fixed;
   right: 15px;
 }
 
@@ -158,14 +154,14 @@ li {
 .spotImages {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px; /* Adjust the margin as needed */
+  margin-top: 20px;
 }
 
 .leftimage {
   max-width: 50%;
 
   .firstImage {
-    width: 100%; /* Make sure the image takes the full width of its container */
+    width: 100%;
     height: 300px
   }
 }
@@ -186,8 +182,6 @@ li {
     }
   }
 }
-
-
 
 .spotsbox {
   padding: 0 10px;
@@ -294,5 +288,19 @@ textarea {
 
 .reviewform {
   text-align: center;
-  font-size: 30px;
+  font-size: 20px;
+}
+
+.star:hover {
+  color: black;
+}
+
+.managespotcontainer ul{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.managespotfirstdiv{
+  margin-left: 180px;
 }

@@ -30,29 +30,15 @@ const SpotForm = ({ spot, formType }) => {
 
   useEffect(() => {
     const errs = {};
-    if (!country) {
-      errs.country = "Country is required";
-    }
-    if (!address) {
-      errs.address = "Address is required";
-    }
-    if (!city) {
-      errs.city = "City is required";
-    }
-    if (!state) {
-      errs.state = "State is required";
-    }
+    if (!country) errs.country = "Country is required";
+    if (!address) errs.address = "Address is required";
+    if (!city) errs.city = "City is required";
+    if (!state) errs.state = "State is required";
+    if (!name) errs.name = "Name is required";
+    if (!price) errs.price = "Price is required";
+    if (!preUrl) errs.preUrl = "Preview image is required";
     if (!description || description && description.length < 30) {
       errs.description = "Description needs a minimum of 30 characters";
-    }
-    if (!name) {
-      errs.name = "Name is required";
-    }
-    if (!price) {
-      errs.price = "Price is required";
-    }
-    if (!preUrl) {
-      errs.preUrl = "Preview image is required";
     }
     if (
       (preUrl && !preUrl.toLowerCase().endsWith(".png")) &&
@@ -61,7 +47,6 @@ const SpotForm = ({ spot, formType }) => {
     ) {
       errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
     }
-
     if (submitted) {
       if (
         !url1.toLowerCase().endsWith(".png") &&
@@ -110,7 +95,6 @@ const SpotForm = ({ spot, formType }) => {
     } else if(formType === "Create Spot"){
       const newSpot = await dispatch(createSpot(spot))
       spot = newSpot
-      console.log(spot)
     }
 
     if(spot.errors){

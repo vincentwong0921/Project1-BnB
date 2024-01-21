@@ -61,7 +61,7 @@ const ProfileButton = ({ user }) => {
                             <li>Hello, {user.username}</li>
                             <li className="emailcontainer">{user.email}</li>
                             <li>
-                                <Link className="managespotlink">Manage Spots</Link>
+                                <Link to={'/spots/current'} className="managespotlink">Manage Spots</Link>
                             </li>
                             <li>
                                 <button

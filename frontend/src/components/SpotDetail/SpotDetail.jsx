@@ -19,7 +19,7 @@ const SpotDetail = () => {
   const navigate = useNavigate();
 
   const navigateToSpot = (spotId) => {
-    navigate(`/api/spots/${spotId}`);
+    navigate(`/spots/${spotId}`);
   };
 
   const spot = useSelector((state) =>

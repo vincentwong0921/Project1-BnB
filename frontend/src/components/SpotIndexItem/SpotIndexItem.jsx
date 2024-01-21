@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const formatRating = (rating) => {
+export const formatRating = (rating) => {
     return rating ? rating.toFixed(1) : ''
 }
 

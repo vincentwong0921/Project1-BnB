@@ -3,10 +3,9 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { postReview } from "../../store/reviews";
 
-
-
 const CreateReviewModal = ({spot, navigateToSpot}) => {
   const [review, setReview] = useState('')
+  const [stars, setStars] = useState(0)
   const [errors, setErrors] = useState({})
   const dispatch = useDispatch();
   const { closeModal } = useModal();
@@ -21,10 +20,10 @@ const CreateReviewModal = ({spot, navigateToSpot}) => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const newReview = {review}
+    const newReview = {review, stars}
     await dispatch(postReview(spot.id, newReview))
     closeModal()
-    navigateToSpot(spot.id)
+    navigateToSpot(`/spots/${spot.id}`)
   }
 
   return (

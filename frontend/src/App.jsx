@@ -9,6 +9,7 @@ import SpotDetail from "./components/SpotDetail/SpotDetail";
 import "./index.css";
 import EditSpotForm from "./components/SpotForm/EditSpotForm";
 import ManageSpots from "./components/ManageSpots/ManageSpots";
+import ManageReviews from './components/ManageReviews/ManageReviews'
 
 const Layout = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
         path: "/spots/new",
         element: <CreateNewSpot />,
       },
+      {
+        path: '/reviews/current',
+        element: <ManageReviews/>
+      }
     ],
   },
 ]);

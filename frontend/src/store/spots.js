@@ -28,6 +28,18 @@ export const deleteSpot = spotId => ({
 
 /* Thunk */
 
+export const getOwnedSpots = () => async(dispatch) => {
+    const response = await csrfFetch('/api/spots/current')
+
+    if(response.ok){
+        const spots = await response.json()
+        dispatch(loadAllSpots(spots))
+    } else {
+        const error = await response.json()
+        return error
+    }
+}
+
 export const getAllSpots = () => async(dispatch) => {
     const response = await csrfFetch('/api/spots')
     if(response.ok){
@@ -59,15 +71,12 @@ export const createSpot = spot => async(dispatch) => {
         body: JSON.stringify(spot)
     })
 
-    console.log(response)
     if(response.ok){
-        console.log(response)
         const newSpot = await response.json()
         dispatch(receiveSpot(newSpot))
         return newSpot
     } else {
         const error = await response.json()
-        console.log(error)
         return error
     }
 }
@@ -79,10 +88,7 @@ export const updateSpot = spot => async(dispatch) => {
         body: JSON.stringify(spot)
     })
 
-    console.log(response)
-
     if(response.ok){
-        console.log(response)
         const newSpot = await response.json()
         dispatch(editSpot(newSpot))
         return newSpot
@@ -92,6 +98,18 @@ export const updateSpot = spot => async(dispatch) => {
     }
 }
 
+export const removeSpot = spotId => async(dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'DELETE'
+    })
+
+    if(response.ok){
+        dispatch(deleteSpot(spotId))
+    } else {
+        const error = response.json()
+        return error
+    }
+}
 
 /* Reducer */
 
