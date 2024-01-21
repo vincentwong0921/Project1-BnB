@@ -29,7 +29,7 @@ export const deleteReview = reviewId => ({
 
 /* Thunk */
 
-export const getAllReviews = spotId => async(dispatch) => {
+export const getAllReviewsOfASpot = spotId => async(dispatch) => {
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`)
 
     if(response.ok){
@@ -37,6 +37,22 @@ export const getAllReviews = spotId => async(dispatch) => {
         dispatch(loadAllReviews(reviews))
     } else {
         const error = await response.json()
+        return error
+    }
+}
+
+export const postReview = (spotId, review) => async(dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+        method: 'POST',
+        header: {'Content-Type': 'application/json'},
+        body: JSON.stringify(review)
+    })
+
+    if(res.ok){
+        const newReview = await res.json()
+        dispatch(receiveReview(newReview))
+    } else {
+        const error = await res.json()
         return error
     }
 }

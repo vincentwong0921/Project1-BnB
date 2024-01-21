@@ -1,5 +1,9 @@
 import { Link } from 'react-router-dom'
 
+const formatRating = (rating) => {
+    return rating ? rating.toFixed(1) : ''
+}
+
 const SpotIndexItem = ({ spot }) => {
     return(
         <div className='spotsbox'>
@@ -15,7 +19,7 @@ const SpotIndexItem = ({ spot }) => {
                 <div className='citystaterating'>
                     {spot.city}, {spot.state}
                     <div>
-                        <i className="fa-solid fa-star"></i>{spot.avgRating}
+                        <i className="fa-solid fa-star"></i>{spot.avgRating === 0 ? 'NEW' : formatRating(spot.avgRating)}
                     </div>
                 </div>
                 <span style={{fontWeight: 'bold'}}>${spot.price}</span> per night

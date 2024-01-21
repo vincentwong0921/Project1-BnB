@@ -50,7 +50,7 @@ const ProfileButton = ({ user }) => {
 
     return(
         <>
-            <button onClick={toggleMenu}>
+            <button className="id-card" onClick={toggleMenu}>
                 <i className="fa-solid fa-id-card"></i>
             </button>
 

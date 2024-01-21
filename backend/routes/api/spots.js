@@ -221,7 +221,10 @@ router.get('/', validateQuery, async(req, res, next) => {
         query.offset = size * ( page - 1 )
     }
 
-    query.include = [{ model: Review },{ model: Image }]
+    query.include = [
+        { model: Review },
+        { model: Image }
+    ]
 
     const spots = await Spot.findAll(
         query
@@ -250,16 +253,16 @@ router.get('/', validateQuery, async(req, res, next) => {
 
         delete spot.Reviews;
 
-        if(spot.Images.length !== 0){
+        if (spot.Images.length !== 0) {
+            let previewImage = "None provided";
             spot.Images.forEach(image => {
-                if(image.preview === true){
-                    spot.previewImage = image.url
-                } else{
-                    spot.previewImage = "None provided"
+                if (image.preview === true) {
+                    previewImage = image.url;
                 }
-            })
+            });
+            spot.previewImage = previewImage;
         } else {
-            spot.previewImage = "None provided"
+            spot.previewImage = "None provided";
         }
 
         delete spot.Images;
@@ -338,6 +341,7 @@ router.get('/:spotId', async(req, res) => {
             {
                 model: Image,
                 attributes: {exclude: ['imageableId', 'imageableType', 'createdAt', 'updatedAt']},
+                order: [['preview', 'DESC']]
             },
             {
                 model: User,
@@ -378,6 +382,9 @@ router.get('/:spotId', async(req, res) => {
 
         returnData.SpotImages = returnData.Images
         delete returnData.Images
+
+        returnData.SpotImages.sort((a, b) => b.preview - a.preview);
+
         returnData.Owner = returnData.User
         delete returnData.User
 

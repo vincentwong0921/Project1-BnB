@@ -1,7 +1,5 @@
 import { useModal } from '../../context/Modal'
 
-
-
 const OpenModalMenuItem = ({ modalComponent, itemText, onItemClick, onModalClose }) => {
     const { setModalContent, setOnModalClose } = useModal()
 

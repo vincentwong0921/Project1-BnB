@@ -1,42 +1,31 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { createSpot } from "../../store/spots";
+import { createSpot, updateSpot } from "../../store/spots";
 
-const CreateNewSpot = () => {
+const SpotForm = ({ spot, formType }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [country, setCountry] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [description, setDescription] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+  const [country, setCountry] = useState(spot?.country);
+  const [address, setAddress] = useState(spot?.address);
+  const [city, setCity] = useState(spot?.city);
+  const [state, setState] = useState(spot?.state);
+  const [lat, setLat] = useState(spot?.lat);
+  const [lng, setLng] = useState(spot?.lng);
+  const [description, setDescription] = useState(spot?.description);
+  const [name, setName] = useState(spot?.name);
+  const [price, setPrice] = useState(spot?.price);
   const [preUrl, setPreUrl] = useState("");
   const [url1, setUrl1] = useState("");
   const [url2, setUrl2] = useState("");
   const [url3, setUrl3] = useState("");
   const [url4, setUrl4] = useState("");
-  const [error, setError] = useState({});
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
   const reset = () => {
-    setCountry(""),
-      setAddress(""),
-      setCity(""),
-      setState(""),
-      setLat(""),
-      setLng(""),
-      setDescription(""),
-      setName(""),
-      setPreUrl(""),
-      setUrl1(""),
-      setUrl2(""),
-      setUrl3(""),
-      setUrl4("");
+    setCountry(""), setAddress(""),setCity(""),setState(""),setLat(""),setLng(""),setDescription(""),
+    setName(""),setPreUrl(""),setUrl1(""),setUrl2(""),setUrl3(""),setUrl4("");
   };
 
   useEffect(() => {
@@ -53,7 +42,7 @@ const CreateNewSpot = () => {
     if (!state) {
       errs.state = "State is required";
     }
-    if (description.length < 30) {
+    if (!description || description && description.length < 30) {
       errs.description = "Description needs a minimum of 30 characters";
     }
     if (!name) {
@@ -103,49 +92,48 @@ const CreateNewSpot = () => {
         errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
       }
     }
-    setError(errs);
-  }, [
-    country,
-    address,
-    city,
-    state,
-    price,
-    description,
-    name,
-    preUrl,
-    url1,
-    url2,
-    url3,
-    url4,
-    submitted,
-  ]);
+    setErrors(errs);
+  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, submitted]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    const newSpot = { country, address, city, state, description, name, price };
+    spot = {...spot, country, address, city, state, lat, lng, description, name, price }
+
     if (lat !== undefined && lng !== undefined) {
-      newSpot.lat = lat || 10;
-      newSpot.lng = lng || 20;
+      spot.lat = lat || 10;
+      spot.lng = lng || 20;
     }
 
-    const createdSpot = await dispatch(createSpot(newSpot));
+    if(formType === "Update Your Spot") {
+      const editedSpot = await dispatch(updateSpot(spot))
+      spot = editedSpot
+    } else if(formType === "Create Spot"){
+      const newSpot = await dispatch(createSpot(spot))
+      spot = newSpot
+      console.log(spot)
+    }
 
-    navigate(`/api/spots/${createdSpot.id}`);
-    reset();
+    if(spot.errors){
+      console.log(spot.errors)
+      setErrors(spot.errors)
+    } else {
+      setSubmitted(true);
+      navigate(`/spots/${spot.id}`);
+      reset();
+    }
   };
 
   return (
     <form className="createspotform" onSubmit={handleSubmit}>
       <div>
-        <h2>Create a new Spot</h2>
+        <h2>{formType}</h2>
         <h4>Where&apos;s your place located?</h4>
         <p>Guests will only get your exact address once they booked a reservation.</p>
       </div>
 
         <label>
           <span>Country</span>
-          {error.country && <span className="errormsg"> {error.country}</span>}
+          {errors.country && <span className="errormsg"> {errors.country}</span>}
           <input
             type="text"
             value={country}
@@ -156,7 +144,7 @@ const CreateNewSpot = () => {
 
         <label>
           Street Address
-          {error.address && <span className="errormsg"> {error.address}</span>}
+          {errors.address && <span className="errormsg"> {errors.address}</span>}
           <input
             type="text"
             value={address}
@@ -167,7 +155,7 @@ const CreateNewSpot = () => {
 
       <div className="citystate">
           <label>
-            City {error.city && <span className="errormsg"> {error.city}</span>}
+            City {errors.city && <span className="errormsg"> {errors.city}</span>}
             <input
               type="text"
               value={city}
@@ -175,9 +163,9 @@ const CreateNewSpot = () => {
               placeholder="City"
             />
           </label>
-          
+
           <label>
-            State {error.state && <span className="errormsg"> {error.state}</span>}
+            State {errors.state && <span className="errormsg"> {errors.state}</span>}
             <input
               type="text"
               value={state}
@@ -222,7 +210,7 @@ const CreateNewSpot = () => {
             placeholder="Please write at least 30 characters"
           />
         </label>
-        {error.description && <p className="errormsg">{error.description}</p>}
+        {errors.description && <p className="errormsg">{errors.description}</p>}
       </div>
 
       <div className="spottitle">
@@ -239,7 +227,7 @@ const CreateNewSpot = () => {
             placeholder="Name of your spot"
           />
         </label>
-        {error.name && <p className="errormsg">{error.name}</p>}
+        {errors.name && <p className="errormsg">{errors.name}</p>}
       </div>
 
       <div className="spotprice">
@@ -255,7 +243,7 @@ const CreateNewSpot = () => {
             placeholder="Price per night(USD)"
           />
         </label>
-        {error.price && <p className="errormsg">{error.price}</p>}
+        {errors.price && <p className="errormsg">{errors.price}</p>}
       </div>
 
       <div className="spoturl">
@@ -267,7 +255,7 @@ const CreateNewSpot = () => {
           onChange={(e) => setPreUrl(e.target.value)}
           placeholder="Preview Image URL"
         />
-        {error.preUrl && <p className="errormsg">{error.preUrl}</p>}
+        {errors.preUrl && <p className="errormsg">{errors.preUrl}</p>}
 
         <input
           type="text"
@@ -275,7 +263,7 @@ const CreateNewSpot = () => {
           onChange={(e) => setUrl1(e.target.value)}
           placeholder="Image URL"
         />
-        {error.url1 && <p className="errormsg">{error.url1}</p>}
+        {errors.url1 && <p className="errormsg">{errors.url1}</p>}
         <input
           type="text"
           value={url2}
@@ -297,12 +285,12 @@ const CreateNewSpot = () => {
       </div>
 
       <div className="createbutton">
-        <button className="spotbutton" disabled={Object.values(error).length}>
-          Create Spot
+        <button className="spotbutton" disabled={Object.values(errors).length}>
+          {formType}
         </button>
       </div>
     </form>
   );
 };
 
-export default CreateNewSpot;
+export default SpotForm;
