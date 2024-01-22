@@ -21,7 +21,6 @@ const SpotForm = ({ spot, formType }) => {
   const [url3, setUrl3] = useState("");
   const [url4, setUrl4] = useState("");
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
 
   const reset = () => {
     setCountry(""), setAddress(""),setCity(""),setState(""),setLat(""),setLng(""),setDescription(""),
@@ -47,65 +46,64 @@ const SpotForm = ({ spot, formType }) => {
     ) {
       errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
     }
-    if (submitted) {
-      if (
-        !url1.toLowerCase().endsWith(".png") &&
-        !url1.toLowerCase().endsWith(".jpg") &&
-        !url1.toLowerCase().endsWith(".jpeg")
-      ) {
-        errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
-      }
-      if (
-        !url2.toLowerCase().endsWith(".png") &&
-        !url2.toLowerCase().endsWith(".jpg") &&
-        !url2.toLowerCase().endsWith(".jpeg")
-      ) {
-        errs.url2 = "Image URL must end in .png, .jpg, .jpeg";
-      }
-      if (
-        !url3.toLowerCase().endsWith(".png") &&
-        !url3.toLowerCase().endsWith(".jpg") &&
-        !url3.toLowerCase().endsWith(".jpeg")
-      ) {
-        errs.url3 = "Image URL must end in .png, .jpg, .jpeg";
-      }
-      if (
-        !url4.toLowerCase().endsWith(".png") &&
-        !url4.toLowerCase().endsWith(".jpg") &&
-        !url4.toLowerCase().endsWith(".jpeg")
-      ) {
-        errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
-      }
+    if (
+      (url1 && !preUrl.toLowerCase().endsWith(".png")) &&
+      (url1 && !preUrl.toLowerCase().endsWith(".jpg")) &&
+      (url1 && !preUrl.toLowerCase().endsWith(".jpeg"))
+    ) {
+      errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
+    }
+    if (
+      (url2 && !preUrl.toLowerCase().endsWith(".png")) &&
+      (url2 && !preUrl.toLowerCase().endsWith(".jpg")) &&
+      (url2 && !preUrl.toLowerCase().endsWith(".jpeg"))
+    ) {
+      errs.url2 = "Image URL must end in .png, .jpg, .jpeg";
+    }
+    if (
+      (url3 && !preUrl.toLowerCase().endsWith(".png")) &&
+      (url3 && !preUrl.toLowerCase().endsWith(".jpg")) &&
+      (url3 && !preUrl.toLowerCase().endsWith(".jpeg"))
+    ) {
+      errs.url3 = "Image URL must end in .png, .jpg, .jpeg";
+    }
+    if (
+      (url4 && !preUrl.toLowerCase().endsWith(".png")) &&
+      (url4 && !preUrl.toLowerCase().endsWith(".jpg")) &&
+      (url4 && !preUrl.toLowerCase().endsWith(".jpeg"))
+    ) {
+      errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
     }
     setErrors(errs);
-  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, submitted]);
+  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4 ]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    spot = {...spot, country, address, city, state, lat, lng, description, name, price }
+    try {
+      e.preventDefault();
+      spot = { ...spot, country, address, city, state, price, description, name, lat, lng }
 
-    if (lat !== undefined && lng !== undefined) {
-      spot.lat = lat || 10;
-      spot.lng = lng || 20;
-    }
+      if (lat !== undefined && lng !== undefined) {
+        spot.lat = lat || 10;
+        spot.lng = lng || 20;
+      }
 
-    if(formType === "Update Your Spot") {
-      const editedSpot = await dispatch(updateSpot(spot))
-      spot = editedSpot
-    } else if(formType === "Create Spot"){
-      const newSpot = await dispatch(createSpot(spot))
-      spot = newSpot
-    }
+      if (formType === "Update Your Spot") {
+        const editedSpot = await dispatch(updateSpot(spot))
+        spot = editedSpot
+      } else if (formType === "Create Spot") {
+        const newSpot = await dispatch(createSpot(spot))
+        spot = newSpot
+      }
 
-    if(spot.errors){
-      console.log(spot.errors)
-      setErrors(spot.errors)
-    } else {
-      setSubmitted(true);
       navigate(`/spots/${spot.id}`);
       reset();
+
+    } catch (error) {
+        const spotError = await error.json()
+        setErrors(spotError.errors)
     }
   };
+
 
   return (
     <form className="createspotform" onSubmit={handleSubmit}>

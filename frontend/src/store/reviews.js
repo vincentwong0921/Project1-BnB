@@ -51,6 +51,7 @@ export const postReview = (spotId, review) => async(dispatch) => {
     if(res.ok){
         const newReview = await res.json()
         dispatch(receiveReview(newReview))
+        return newReview
     } else {
         const error = await res.json()
         return error

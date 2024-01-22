@@ -73,9 +73,11 @@ export const createSpot = spot => async(dispatch) => {
 
     if(response.ok){
         const newSpot = await response.json()
+        console.log('hit this line 76')
         dispatch(receiveSpot(newSpot))
         return newSpot
     } else {
+        console.log('hit this line 80')
         const error = await response.json()
         return error
     }
@@ -106,7 +108,7 @@ export const removeSpot = spotId => async(dispatch) => {
     if(response.ok){
         dispatch(deleteSpot(spotId))
     } else {
-        const error = response.json()
+        const error = await response.json()
         return error
     }
 }
