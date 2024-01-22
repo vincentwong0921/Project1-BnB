@@ -4,7 +4,7 @@ import { getOwnedSpots } from "../../store/spots";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { formatRating } from "../SpotIndexItem/SpotIndexItem";
+import { formatRating } from "../../utils/function";
 import DeleteSpotModal from './DeleteSpotModal'
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
@@ -23,6 +23,7 @@ const ManageSpots = () => {
     e.preventDefault();
     navigate("/spots/new");
   };
+
 
   if (!spots) return <>Loading....</>;
 
@@ -59,7 +60,7 @@ const ManageSpots = () => {
                     <span style={{ fontWeight: "bold" }}>${spot.price}</span> night
 
                     <div>
-                        <button>Update</button>
+                        <button onClick={() => navigate(`/spots/${spot.id}/edit`)}>Update</button>
                         <OpenModalButton
                             buttonText='Delete'
                             modalComponent={

@@ -420,6 +420,8 @@ router.get('/:spotId/reviews', async(req, res, next) => {
         })
 
         returnData.Reviews = reviewsList
+        reviewsList.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
+
         return res.json(returnData)
     } else{
         res.status(404).json({message: "Spot couldn't be found"})

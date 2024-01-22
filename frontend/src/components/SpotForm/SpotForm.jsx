@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createSpot, updateSpot } from "../../store/spots";
+import { postSpotImage } from "../../store/spots";
 
 const SpotForm = ({ spot, formType }) => {
   const navigate = useNavigate();
@@ -15,12 +16,13 @@ const SpotForm = ({ spot, formType }) => {
   const [description, setDescription] = useState(spot?.description);
   const [name, setName] = useState(spot?.name);
   const [price, setPrice] = useState(spot?.price);
-  const [preUrl, setPreUrl] = useState("");
-  const [url1, setUrl1] = useState("");
-  const [url2, setUrl2] = useState("");
-  const [url3, setUrl3] = useState("");
-  const [url4, setUrl4] = useState("");
   const [errors, setErrors] = useState({});
+
+  const [preUrl, setPreUrl] = useState(spot && spot.SpotImages && spot.SpotImages[0] && spot.SpotImages[0].url || '');
+  const [url1, setUrl1] = useState(spot && spot.SpotImages && spot.SpotImages[1] && spot.SpotImages[1].url || '');
+  const [url2, setUrl2] = useState(spot && spot.SpotImages && spot.SpotImages[2] && spot.SpotImages[2].url || '');
+  const [url3, setUrl3] = useState(spot && spot.SpotImages && spot.SpotImages[3] && spot.SpotImages[3].url || '');
+  const [url4, setUrl4] = useState(spot && spot.SpotImages && spot.SpotImages[4] && spot.SpotImages[4].url || '');
 
   const reset = () => {
     setCountry(""), setAddress(""),setCity(""),setState(""),setLat(""),setLng(""),setDescription(""),
@@ -47,30 +49,30 @@ const SpotForm = ({ spot, formType }) => {
       errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
     }
     if (
-      (url1 && !preUrl.toLowerCase().endsWith(".png")) &&
-      (url1 && !preUrl.toLowerCase().endsWith(".jpg")) &&
-      (url1 && !preUrl.toLowerCase().endsWith(".jpeg"))
+      (url1 && !url1.toLowerCase().endsWith(".png")) &&
+      (url1 && !url1.toLowerCase().endsWith(".jpg")) &&
+      (url1 && !url1.toLowerCase().endsWith(".jpeg"))
     ) {
       errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
     }
     if (
-      (url2 && !preUrl.toLowerCase().endsWith(".png")) &&
-      (url2 && !preUrl.toLowerCase().endsWith(".jpg")) &&
-      (url2 && !preUrl.toLowerCase().endsWith(".jpeg"))
+      (url2 && !url2.toLowerCase().endsWith(".png")) &&
+      (url2 && !url2.toLowerCase().endsWith(".jpg")) &&
+      (url2 && !url2.toLowerCase().endsWith(".jpeg"))
     ) {
       errs.url2 = "Image URL must end in .png, .jpg, .jpeg";
     }
     if (
-      (url3 && !preUrl.toLowerCase().endsWith(".png")) &&
-      (url3 && !preUrl.toLowerCase().endsWith(".jpg")) &&
-      (url3 && !preUrl.toLowerCase().endsWith(".jpeg"))
+      (url3 && !url3.toLowerCase().endsWith(".png")) &&
+      (url3 && !url3.toLowerCase().endsWith(".jpg")) &&
+      (url3 && !url3.toLowerCase().endsWith(".jpeg"))
     ) {
       errs.url3 = "Image URL must end in .png, .jpg, .jpeg";
     }
     if (
-      (url4 && !preUrl.toLowerCase().endsWith(".png")) &&
-      (url4 && !preUrl.toLowerCase().endsWith(".jpg")) &&
-      (url4 && !preUrl.toLowerCase().endsWith(".jpeg"))
+      (url4 && !url4.toLowerCase().endsWith(".png")) &&
+      (url4 && !url4.toLowerCase().endsWith(".jpg")) &&
+      (url4 && !url4.toLowerCase().endsWith(".jpeg"))
     ) {
       errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
     }
@@ -81,6 +83,12 @@ const SpotForm = ({ spot, formType }) => {
     try {
       e.preventDefault();
       spot = { ...spot, country, address, city, state, price, description, name, lat, lng }
+
+      const previewImage = { url: preUrl, preview: true }
+      const img1 = {url: url1, preview: false}
+      const img2 = {url: url2, preview: false}
+      const img3 = {url: url3, preview: false}
+      const img4 = {url: url4, preview: false}
 
       if (lat !== undefined && lng !== undefined) {
         spot.lat = lat || 10;
@@ -93,17 +101,22 @@ const SpotForm = ({ spot, formType }) => {
       } else if (formType === "Create Spot") {
         const newSpot = await dispatch(createSpot(spot))
         spot = newSpot
+        await dispatch(postSpotImage(spot.id, previewImage))
+        await dispatch(postSpotImage(spot.id, img1))
+        await dispatch(postSpotImage(spot.id, img2))
+        await dispatch(postSpotImage(spot.id, img3))
+        await dispatch(postSpotImage(spot.id, img4))
       }
 
       navigate(`/spots/${spot.id}`);
       reset();
 
     } catch (error) {
-        const spotError = await error.json()
-        setErrors(spotError.errors)
+        const errs = await error.json()
+        console.log()
+        setErrors(errs.errors)
     }
   };
-
 
   return (
     <form className="createspotform" onSubmit={handleSubmit}>
@@ -252,18 +265,21 @@ const SpotForm = ({ spot, formType }) => {
           onChange={(e) => setUrl2(e.target.value)}
           placeholder="Image URL"
         />
+        {errors.url2 && <p className="errormsg">{errors.url2}</p>}
         <input
           type="text"
           value={url3}
           onChange={(e) => setUrl3(e.target.value)}
           placeholder="Image URL"
         />
+        {errors.url3 && <p className="errormsg">{errors.url3}</p>}
         <input
           type="text"
           value={url4}
           onChange={(e) => setUrl4(e.target.value)}
           placeholder="Image URL"
         />
+        {errors.url4 && <p className="errormsg">{errors.url4}</p>}
       </div>
 
       <div className="createbutton">

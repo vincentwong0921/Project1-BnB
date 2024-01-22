@@ -35,9 +35,15 @@ export const getAllReviewsOfASpot = spotId => async(dispatch) => {
     if(response.ok){
         const reviews = await response.json()
         dispatch(loadAllReviews(reviews))
-    } else {
-        const error = await response.json()
-        return error
+    }
+}
+
+export const getAllReviewsOfCurrentUser = () => async(dispatch) => {
+    const res = await csrfFetch('/api/reviews/current')
+
+    if(res.ok){
+        const reviews = await res.json()
+        dispatch(loadAllReviews(reviews))
     }
 }
 
@@ -52,12 +58,32 @@ export const postReview = (spotId, review) => async(dispatch) => {
         const newReview = await res.json()
         dispatch(receiveReview(newReview))
         return newReview
-    } else {
-        const error = await res.json()
-        return error
     }
 }
 
+export const updateReview = review => async(dispatch) => {
+    const res = await csrfFetch(`/api/reviews/${review.id}`, {
+        method: 'PUT',
+        header: {'Content-Type': 'application/json'},
+        body: JSON.stringify(review)
+    })
+
+    if(res.ok){
+        const newReview = await res.json()
+        dispatch(editReview(newReview))
+        return newReview
+    }
+}
+
+export const removeReview = (reviewId) => async(dispatch) => {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: 'DELETE'
+    })
+
+    if(res.ok){
+        dispatch(deleteReview(reviewId))
+    }
+}
 
 /* Reducer */
 
@@ -68,8 +94,18 @@ const reviewReducer = (state = initialState, action) => {
         case LOAD_REVIEWS: {
             const reviewState = {}
             action.reviews.Reviews.forEach(review => reviewState[review.id] = review)
-            console.log(reviewState)
             return reviewState
+        }
+        case RECEIVE_REVIEW: {
+            return {...state, [action.review.id]: action.review}
+        }
+        case UPDATE_REVIEW: {
+            return {...state, [action.review.id]: action.review}
+        }
+        case REMOVE_REVIEW: {
+            const newReviewState = {...state}
+            delete newReviewState[action.reviewId]
+            return newReviewState
         }
         default:
             return state

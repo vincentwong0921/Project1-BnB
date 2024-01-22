@@ -61,7 +61,10 @@ const ProfileButton = ({ user }) => {
                             <li>Hello, {user.username}</li>
                             <li className="emailcontainer">{user.email}</li>
                             <li>
-                                <Link to={'/spots/current'} className="managespotlink">Manage Spots</Link>
+                                <Link to={'/spots/current'} onClick={closeMenu} className="managespotlink">Manage Spots</Link>
+                            </li>
+                            <li>
+                                <Link to={'/reviews/current'} onClick={closeMenu} className="managereviewlink">Manage Reviews</Link>
                             </li>
                             <li>
                                 <button

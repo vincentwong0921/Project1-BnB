@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { postReview } from "../../store/reviews";
+import { getOneSpot } from "../../store/spots";
 
 const CreateReviewModal = ({ spot, navigateToSpot }) => {
   const [review, setReview] = useState("");
@@ -24,10 +25,12 @@ const CreateReviewModal = ({ spot, navigateToSpot }) => {
       e.preventDefault();
       const newReview = { review, stars };
       await dispatch(postReview(spot.id, newReview));
+      await dispatch(getOneSpot(spot.id))
       closeModal();
       navigateToSpot(`${spot.id}`);
     } catch(error){
-      console.log(error.json())
+      const errs = await error.json()
+      setErrors(errs.errors)
     }
   };
 
@@ -44,6 +47,7 @@ const CreateReviewModal = ({ spot, navigateToSpot }) => {
         />
       </label>
 
+      {errors.stars && <span className="errormsg">{errors.stars}</span>}
       <div className="stars">
         {[...Array(5)].map((star, index) => {
           const currentRating = index + 1;

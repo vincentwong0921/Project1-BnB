@@ -3,15 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOneSpot } from "../../store/spots";
 import { useEffect } from "react";
 import { getAllReviewsOfASpot } from "../../store/reviews";
-import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import CreateReviewModal from "./CreateReviewModal";
 import { useNavigate } from "react-router-dom";
-
-const formatDate = (date) => {
-  const dateToChange = new Date(date);
-  const options = { month: "long", year: "numeric" };
-  return dateToChange.toLocaleDateString(undefined, options);
-};
+import { formatRating } from "../../utils/function";
+import ReviewDetails from "./ReviewDetails";
 
 const SpotDetail = () => {
   const { spotId } = useParams();
@@ -22,25 +16,14 @@ const SpotDetail = () => {
     navigate(`/spots/${spotId}`);
   };
 
-  const spot = useSelector((state) =>
-    state.spots ? state.spots[spotId] : null
-  );
-  const reviews = Object.values(
-    useSelector((state) => (state.reviews ? state.reviews : null))
-  );
-  const currentUser = useSelector((state) =>
-    state.session.user ? state.session.user : null
-  );
-  const reviewWriters = reviews ? reviews.map((review) => review.userId) : [];
-  const userIsNotTheSpotOwner = currentUser?.id !== spot?.ownerId;
-  const userDidNotPostReview = reviewWriters.includes(currentUser?.id);
+  const spot = useSelector((state) => state.spots ? state.spots[spotId] : null);
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
     dispatch(getAllReviewsOfASpot(spotId));
   }, [dispatch, spotId]);
 
-  if (!spot || !reviews) return <>Loading.....</>;
+  if (!spot) return <>Loading.....</>;
 
   return (
     <div className="spotdetailpage">
@@ -117,7 +100,7 @@ const SpotDetail = () => {
               <span>NEW</span>
             ) : (
               <span>
-                {spot.avgStarRating} · {spot.numReviews}{" "}
+                {formatRating(spot.avgStarRating)} · {spot?.numReviews}{" "}
                 {spot.numReviews > 1 ? "reviews" : "review"}
               </span>
             )}
@@ -137,40 +120,10 @@ const SpotDetail = () => {
       </div>
 
       <div>
-        <i className="fa-solid fa-star"></i>
-        {spot.numReviews === 0 ? (
-          <>
-            <span className="NEW">NEW</span>
-            {!userDidNotPostReview && userIsNotTheSpotOwner && currentUser ? (
-              <OpenModalButton
-                buttonText="Post Your Review"
-                modalComponent={
-                  <CreateReviewModal
-                    spot={spot}
-                    navigateToSpot={navigateToSpot}
-                  />
-                }
-              />
-            ) : null}
-            <p>Be the first to post a review!</p>
-          </>
-        ) : (
-          <span>
-            <span className="numreviews">
-              {spot.avgStarRating} · {spot.numReviews}{" "}
-              {spot.numReviews > 1 ? "reviews" : "review"}
-            </span>
-            <ul>
-              {reviews.map((review) => (
-                <div key={review.id} className="reviewitem">
-                  <li className="firstname">{review.User.firstName}</li>
-                  <li className="reviewdate">{formatDate(review.createdAt)}</li>
-                  <li>{review.review}</li>
-                </div>
-              ))}
-            </ul>
-          </span>
-        )}
+        <ReviewDetails
+          spot={spot}
+          navigateToSpot={navigateToSpot}
+        />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ const LOAD_SPOTS = 'spots/LOAD_SPOTS'
 const RECEIVE_SPOT = 'spots/RECEIVE_SPOT'
 const UPDATE_SPOT = 'spots/UPDATE_SPOT'
 const REMOVE_SPOT = 'spots/REMOVE_SPOT'
+const RECEIVE_SPOT_IMAGE = 'spots/RECEIVE_SPOT_IMAGES'
 
 /* Action Creator */
 export const loadAllSpots = spots => ({
@@ -26,7 +27,26 @@ export const deleteSpot = spotId => ({
     spotId
 })
 
+export const receiveSpotImage = (spotId, image) => ({
+    type: RECEIVE_SPOT_IMAGE,
+    image
+})
+
 /* Thunk */
+
+export const postSpotImage = (spotId, image) => async(dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+        method: 'POST',
+        header: {'Content-Type': 'application/json'},
+        body: JSON.stringify(image)
+    })
+
+    if(res.ok){
+        const images = await res.json()
+        dispatch(receiveSpotImage(images))
+    }
+}
+
 
 export const getOwnedSpots = () => async(dispatch) => {
     const response = await csrfFetch('/api/spots/current')
@@ -34,9 +54,6 @@ export const getOwnedSpots = () => async(dispatch) => {
     if(response.ok){
         const spots = await response.json()
         dispatch(loadAllSpots(spots))
-    } else {
-        const error = await response.json()
-        return error
     }
 }
 
@@ -45,9 +62,6 @@ export const getAllSpots = () => async(dispatch) => {
     if(response.ok){
         const spots = await response.json()
         dispatch(loadAllSpots(spots))
-    } else {
-        const error = await response.json()
-        return error
     }
 }
 
@@ -57,10 +71,6 @@ export const getOneSpot = spotId => async(dispatch) => {
     if(response.ok){
         const spotDetail = await response.json()
         dispatch(receiveSpot(spotDetail))
-    } else {
-        const error = await response.json()
-        console.log(error)
-        return error
     }
 }
 
@@ -73,13 +83,8 @@ export const createSpot = spot => async(dispatch) => {
 
     if(response.ok){
         const newSpot = await response.json()
-        console.log('hit this line 76')
         dispatch(receiveSpot(newSpot))
         return newSpot
-    } else {
-        console.log('hit this line 80')
-        const error = await response.json()
-        return error
     }
 }
 
@@ -94,9 +99,6 @@ export const updateSpot = spot => async(dispatch) => {
         const newSpot = await response.json()
         dispatch(editSpot(newSpot))
         return newSpot
-    } else {
-        const error = await response.json()
-        return error
     }
 }
 
@@ -107,10 +109,7 @@ export const removeSpot = spotId => async(dispatch) => {
 
     if(response.ok){
         dispatch(deleteSpot(spotId))
-    } else {
-        const error = await response.json()
-        return error
-    }
+    } 
 }
 
 /* Reducer */
@@ -134,6 +133,9 @@ const spotsReducer = (state = initialState, action) => {
             const newSpotState = {...state}
             delete newSpotState[action.spotId]
             return newSpotState
+        }
+        case RECEIVE_SPOT_IMAGE: {
+            return {...state, [action.spotId]: action.SpotImages}
         }
         default:
             return state

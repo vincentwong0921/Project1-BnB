@@ -190,10 +190,14 @@ li {
 .profile-dropdown {
   border: 3px solid black;
   border-radius: 10px;
-  width: 180px;
-  height: 110px;
+  width: 160px;
+  height: 140px;
   font-size: 20px;
-  margin-left: 250px;
+  margin-left: 270px;
+}
+
+.managereviewlink {
+  border-bottom: 1px solid black;
 }
 
 .errormsg {

@@ -32,7 +32,7 @@ const LoginFormModal = ({navigateToHome}) => {
     } catch (res) {
       const data = await res.json();
       if (data?.message) {
-        setErrors({ message: "The provided credentials were invalid" });
+        setErrors({ message: "The provided credentials were invalid." });
       }
     }
   };
