@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { getAllSpots } from "../../store/spots";
 import { Link } from "react-router-dom";
 import { formatRating } from "../../utils/function";
+import { formatPrice } from "../../utils/function";
 
 
 const SpotsLandingPage = () => {
@@ -37,7 +38,7 @@ const SpotsLandingPage = () => {
                   {spot?.avgRating === 0 ? "NEW" : formatRating(spot?.avgRating)}
                 </div>
               </div>
-              <span style={{ fontWeight: "bold" }}>${spot?.price}</span> per
+              <span style={{ fontWeight: "bold" }}>${formatPrice(spot?.price)}</span> per
               night
             </div>
           </div>

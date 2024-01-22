@@ -4,7 +4,7 @@ import { getOneSpot } from "../../store/spots";
 import { useEffect } from "react";
 import { getAllReviewsOfASpot } from "../../store/reviews";
 import { useNavigate } from "react-router-dom";
-import { formatRating } from "../../utils/function";
+import { formatRating, formatPrice } from "../../utils/function";
 import ReviewDetails from "./ReviewDetails";
 
 const SpotDetail = () => {
@@ -94,7 +94,7 @@ const SpotDetail = () => {
 
         <div className="pricereview">
           <div>
-            <span className="pricepernight">${spot.price} night </span>
+            <span className="pricepernight">${formatPrice(spot.price)} night </span>
             <i className="fa-solid fa-star"></i>
             {spot.avgStarRating === 0 ? (
               <span>NEW</span>

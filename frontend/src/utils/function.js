@@ -7,3 +7,11 @@ export const formatDate = (date) => {
 export const formatRating = (rating) => {
   return rating ? rating.toFixed(1) : "";
 };
+
+
+export const formatPrice = price => {
+  return price.toFixed(2)
+}
+
+
+
