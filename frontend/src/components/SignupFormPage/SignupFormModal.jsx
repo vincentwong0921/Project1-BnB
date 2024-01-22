@@ -3,7 +3,6 @@ import * as sessionActions from '../../store/session'
 import { useDispatch } from 'react-redux'
 import { useModal } from '../../context/Modal'
 
-
 const SignupFormModal = () => {
     const [username, setUsername] = useState('')
     const [firstName, setFirstName] = useState('')
@@ -14,7 +13,6 @@ const SignupFormModal = () => {
     const [errors, setErrors] = useState({})
     const { closeModal } = useModal();
     const dispatch = useDispatch()
-
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -57,7 +55,7 @@ const SignupFormModal = () => {
                   required
                 />
               </label>
-              {errors.firstName && <p>{errors.firstName}</p>}
+              {errors.firstName && <div className='errormsg'>{errors.firstName}</div>}
 
               <label>
                 Last Name
@@ -68,7 +66,7 @@ const SignupFormModal = () => {
                   required
                 />
               </label>
-              {errors.lastName && <p>{errors.lastName}</p>}
+              {errors.lastName && <div className='errormsg'>{errors.lastName}</div>}
 
               <label>
                 Email
@@ -79,7 +77,7 @@ const SignupFormModal = () => {
                   required
                 />
               </label>
-              {errors.email && <p>{errors.email}</p>}
+              {errors.email && <div className='errormsg'>{errors.email}</div>}
 
               <label>
                 Username
@@ -90,7 +88,7 @@ const SignupFormModal = () => {
                   required
                 />
               </label>
-              {errors.username && <p>{errors.username}</p>}
+              {errors.username && <div className='errormsg'>{errors.username}</div>}
 
               <label>
                 Password
@@ -101,7 +99,7 @@ const SignupFormModal = () => {
                   required
                 />
               </label>
-              {errors.password && <p>{errors.password}</p>}
+              {errors.password && <div className='errormsg'>{errors.password}</div>}
 
               <label>
                 Confirm Password
@@ -112,10 +110,15 @@ const SignupFormModal = () => {
                   required
                 />
               </label>
-              {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+              {errors.confirmPassword && <div className='errormsg'>{errors.confirmPassword}</div>}
 
               <div className='signup'>
-                <button className='signupbutton' type="submit">Sign Up!</button>
+                <button
+                  className='signupbutton'
+                  type="submit"
+                  disabled={Object.values(errors).length}
+                >
+                  Sign Up!</button>
               </div>
             </form>
 

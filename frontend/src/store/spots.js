@@ -4,7 +4,8 @@ const LOAD_SPOTS = 'spots/LOAD_SPOTS'
 const RECEIVE_SPOT = 'spots/RECEIVE_SPOT'
 const UPDATE_SPOT = 'spots/UPDATE_SPOT'
 const REMOVE_SPOT = 'spots/REMOVE_SPOT'
-const RECEIVE_SPOT_IMAGE = 'spots/RECEIVE_SPOT_IMAGES'
+const RECEIVE_SPOT_IMAGES = 'spots/RECEIVE_SPOT_IMAGES'
+const UPDATE_SPOT_IMAGES = 'spots/UPDATE_SPOT_IMAGES'
 
 /* Action Creator */
 export const loadAllSpots = spots => ({
@@ -27,8 +28,13 @@ export const deleteSpot = spotId => ({
     spotId
 })
 
-export const receiveSpotImage = (spotId, image) => ({
-    type: RECEIVE_SPOT_IMAGE,
+export const receiveSpotImage = image => ({
+    type: RECEIVE_SPOT_IMAGES,
+    image
+})
+
+export const editSpotImages = image => ({
+    type: UPDATE_SPOT_IMAGES,
     image
 })
 
@@ -44,6 +50,19 @@ export const postSpotImage = (spotId, image) => async(dispatch) => {
     if(res.ok){
         const images = await res.json()
         dispatch(receiveSpotImage(images))
+    }
+}
+
+export const editSpotImage = (spotId, image) => async(dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'PUT',
+        header: {'Content-Type': 'application/json'},
+        body: JSON.stringify(image)
+    })
+
+    if(res.ok){
+        const images = await res.json()
+        dispatch(editSpotImages(images))
     }
 }
 
@@ -109,7 +128,7 @@ export const removeSpot = spotId => async(dispatch) => {
 
     if(response.ok){
         dispatch(deleteSpot(spotId))
-    } 
+    }
 }
 
 /* Reducer */
@@ -134,7 +153,10 @@ const spotsReducer = (state = initialState, action) => {
             delete newSpotState[action.spotId]
             return newSpotState
         }
-        case RECEIVE_SPOT_IMAGE: {
+        case RECEIVE_SPOT_IMAGES: {
+            return {...state, [action.spotId]: action.SpotImages}
+        }
+        case UPDATE_SPOT_IMAGES: {
             return {...state, [action.spotId]: action.SpotImages}
         }
         default:

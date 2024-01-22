@@ -318,3 +318,10 @@ input[type=radio]{
   border-radius: 20px;
   border: 2px solid black;
 }
+
+.signupbutton:disabled,
+.loginbutton,
+.submitreviewbutton
+{
+   background-color: lightgrey;
+}

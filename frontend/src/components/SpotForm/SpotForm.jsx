@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createSpot, updateSpot } from "../../store/spots";
 import { postSpotImage } from "../../store/spots";
+import { editSpotImage } from "../../store/spots";
 
 const SpotForm = ({ spot, formType }) => {
   const navigate = useNavigate();
@@ -85,10 +86,6 @@ const SpotForm = ({ spot, formType }) => {
       spot = { ...spot, country, address, city, state, price, description, name, lat, lng }
 
       const previewImage = { url: preUrl, preview: true }
-      const img1 = {url: url1, preview: false}
-      const img2 = {url: url2, preview: false}
-      const img3 = {url: url3, preview: false}
-      const img4 = {url: url4, preview: false}
 
       if (lat !== undefined && lng !== undefined) {
         spot.lat = lat || 10;
@@ -98,14 +95,31 @@ const SpotForm = ({ spot, formType }) => {
       if (formType === "Update Your Spot") {
         const editedSpot = await dispatch(updateSpot(spot))
         spot = editedSpot
+        await dispatch(editSpotImage(spot.id, previewImage))
       } else if (formType === "Create Spot") {
         const newSpot = await dispatch(createSpot(spot))
         spot = newSpot
         await dispatch(postSpotImage(spot.id, previewImage))
-        await dispatch(postSpotImage(spot.id, img1))
-        await dispatch(postSpotImage(spot.id, img2))
-        await dispatch(postSpotImage(spot.id, img3))
-        await dispatch(postSpotImage(spot.id, img4))
+
+        if(url1){
+          const img1 = {url: url1, preview: false}
+          await dispatch(postSpotImage(spot.id, img1))
+        }
+
+        if(url2){
+          const img2 = {url: url2, preview: false}
+          await dispatch(postSpotImage(spot.id, img2))
+        }
+
+        if(url3){
+          const img3 = {url: url3, preview: false}
+          await dispatch(postSpotImage(spot.id, img3))
+        }
+
+        if(url4){
+          const img4 = {url: url4, preview: false}
+          await dispatch(postSpotImage(spot.id, img4))
+        }
       }
 
       navigate(`/spots/${spot.id}`);
