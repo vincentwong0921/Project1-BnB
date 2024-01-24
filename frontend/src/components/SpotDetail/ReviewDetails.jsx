@@ -89,7 +89,11 @@ const ReviewDetails = ({ spotId, navigateToSpot }) => {
                     {review.userId === currentUser?.id ? (
                       <OpenModalButton
                         buttonText="Delete"
-                        modalComponent={<DeleteReviewModal review={review} />}
+                        modalComponent={
+                        <DeleteReviewModal
+                          review={review}
+                          spot={spot}
+                        />}
                       />
                     ) : null}
                   </div>

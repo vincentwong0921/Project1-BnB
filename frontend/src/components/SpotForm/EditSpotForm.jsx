@@ -1,30 +1,29 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOneSpot } from "../../store/spots";
 import SpotForm from "./SpotForm";
+import { getOneSpot } from "../../store/spots";
 
 const EditSpotForm = () => {
   const { spotId } = useParams();
-  const spot = useSelector((state) => state.spots ? state.spots[spotId] : null);
+  const spot = useSelector((state) => state.spots[spotId]);
+  const [loaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getOneSpot(spotId));
+    const fetchSpot = async () => {
+      await dispatch(getOneSpot(spotId));
+      setLoaded(true);
+    };
+
+    fetchSpot();
   }, [dispatch, spotId]);
 
-  if (!spot) return <></>;
+  if (!loaded) return <>Loading...</>;
 
   return (
     <>
-      {Object.keys(spot).length > 1 && (
-        <>
-          <SpotForm
-            spot={spot}
-            formType="Update Spot"
-          />
-        </>
-      )}
+      <SpotForm spot={spot} formType="Update Spot" />
     </>
   );
 };

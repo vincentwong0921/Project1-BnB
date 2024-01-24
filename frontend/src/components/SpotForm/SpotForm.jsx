@@ -18,12 +18,12 @@ const SpotForm = ({ spot, formType }) => {
   const [name, setName] = useState(spot?.name);
   const [price, setPrice] = useState(spot?.price);
   const [errors, setErrors] = useState({});
-
-  const [preUrl, setPreUrl] = useState(spot && spot.SpotImages && spot.SpotImages[0] && spot.SpotImages[0].url || '');
-  const [url1, setUrl1] = useState(spot && spot.SpotImages && spot.SpotImages[1] && spot.SpotImages[1].url || '');
-  const [url2, setUrl2] = useState(spot && spot.SpotImages && spot.SpotImages[2] && spot.SpotImages[2].url || '');
-  const [url3, setUrl3] = useState(spot && spot.SpotImages && spot.SpotImages[3] && spot.SpotImages[3].url || '');
-  const [url4, setUrl4] = useState(spot && spot.SpotImages && spot.SpotImages[4] && spot.SpotImages[4].url || '');
+  
+  const [preUrl, setPreUrl] = useState(spot?.SpotImages?.[0] ? spot.SpotImages[0].url : '')
+  const [url1, setUrl1] = useState(spot?.SpotImages?.[1]?.url );
+  const [url2, setUrl2] = useState(spot?.SpotImages?.[2]?.url );
+  const [url3, setUrl3] = useState(spot?.SpotImages?.[3]?.url );
+  const [url4, setUrl4] = useState(spot?.SpotImages?.[4]?.url );
 
   const reset = () => {
     setCountry(""), setAddress(""),setCity(""),setState(""),setLat(""),setLng(""),setDescription(""),
@@ -78,7 +78,7 @@ const SpotForm = ({ spot, formType }) => {
       errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
     }
     setErrors(errs);
-  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4 ]);
+  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, spot ]);
 
   const handleSubmit = async (e) => {
     try {
@@ -96,6 +96,8 @@ const SpotForm = ({ spot, formType }) => {
         const editedSpot = await dispatch(updateSpot(spot))
         spot = editedSpot
         await dispatch(editSpotImage(spot.id, previewImage))
+
+
       } else if (formType === "Create Spot") {
         const newSpot = await dispatch(createSpot(spot))
         spot = newSpot
@@ -127,6 +129,7 @@ const SpotForm = ({ spot, formType }) => {
 
     } catch (error) {
         const errs = await error.json()
+        console.log(errs)
         setErrors(errs.errors)
     }
   };

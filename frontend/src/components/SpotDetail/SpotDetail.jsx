@@ -21,7 +21,7 @@ const SpotDetail = () => {
   useEffect(() => {
     dispatch(getOneSpot(spotId));
     dispatch(getAllReviewsOfASpot(spotId));
-  }, [dispatch, spotId, spot]);
+  }, [dispatch, spotId]);
 
   if (!spot) return <>Loading.....</>;
 

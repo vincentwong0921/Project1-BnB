@@ -56,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: '/reviews/current',
         element: <ManageReviews/>
+      },
+      {
+        path: '*',
+        element: <h1>Page Not Found</h1>
       }
     ],
   },
