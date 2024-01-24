@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { formatRating } from "../../utils/function";
 import { formatPrice } from "../../utils/function";
 
-
 const SpotsLandingPage = () => {
   const dispatch = useDispatch();
   let spots = Object.values(useSelector((state) => (state.spots ? state.spots : null)));
@@ -35,10 +34,10 @@ const SpotsLandingPage = () => {
                 {spot?.city}, {spot?.state}
                 <div>
                   <i className="fa-solid fa-star"></i>
-                  {spot?.avgRating === 0 ? "NEW" : formatRating(spot?.avgRating)}
+                  {spot?.avgRating === 0 ? "NEW" : (spot?.avgRating && formatRating(spot?.avgRating))}
                 </div>
               </div>
-              <span style={{ fontWeight: "bold" }}>${formatPrice(spot?.price)}</span> per
+              <span style={{ fontWeight: "bold" }}>${spot?.price && formatPrice(spot?.price)}</span> per
               night
             </div>
           </div>

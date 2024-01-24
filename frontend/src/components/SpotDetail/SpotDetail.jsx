@@ -21,7 +21,7 @@ const SpotDetail = () => {
   useEffect(() => {
     dispatch(getOneSpot(spotId));
     dispatch(getAllReviewsOfASpot(spotId));
-  }, [dispatch, spotId]);
+  }, [dispatch, spotId, spot]);
 
   if (!spot) return <>Loading.....</>;
 
@@ -121,7 +121,7 @@ const SpotDetail = () => {
 
       <div>
         <ReviewDetails
-          spot={spot}
+          spotId={spotId}
           navigateToSpot={navigateToSpot}
         />
       </div>

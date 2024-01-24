@@ -127,7 +127,6 @@ const SpotForm = ({ spot, formType }) => {
 
     } catch (error) {
         const errs = await error.json()
-        console.log()
         setErrors(errs.errors)
     }
   };
@@ -135,7 +134,7 @@ const SpotForm = ({ spot, formType }) => {
   return (
     <form className="createspotform" onSubmit={handleSubmit}>
       <div>
-        <h2>{formType}</h2>
+        <h2>{formType === "Create Spot" ? 'Create a New Spot' : 'Update Your Spot'}</h2>
         <h4>Where&apos;s your place located?</h4>
         <p>Guests will only get your exact address once they booked a reservation.</p>
       </div>

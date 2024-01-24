@@ -39,7 +39,7 @@ const ManageSpots = () => {
             {spots &&
             spots.map((spot) => (
                 <li key={spot.id}>
-                <Link to={`/spots/${spot.id}`}>
+                <Link to={`/spots/${spot?.id}`}>
                     <img
                     src={spot.previewImage}
                     className="spotimage"

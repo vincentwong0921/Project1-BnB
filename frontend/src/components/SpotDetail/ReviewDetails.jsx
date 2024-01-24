@@ -5,10 +5,13 @@ import DeleteReviewModal from "./DeleteReviewModal";
 import { formatRating } from "../../utils/function";
 import { formatDate } from "../../utils/function";
 
-const ReviewDetails = ({ spot, navigateToSpot }) => {
+const ReviewDetails = ({ spotId, navigateToSpot }) => {
   let reviews = Object.values(
     useSelector((state) => (state.reviews ? state.reviews : null))
   );
+
+  const spot = useSelector(state => state.spots ? state.spots[spotId] : null)
+
 
   reviews = reviews.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -28,6 +31,9 @@ const ReviewDetails = ({ spot, navigateToSpot }) => {
   } else {
     userDidPostReview = true;
   }
+
+  if(!spot || !reviews) return <>Loading....</>
+
 
   return (
     <>
@@ -73,6 +79,7 @@ const ReviewDetails = ({ spot, navigateToSpot }) => {
             <ul>
               {reviews &&
                 reviews.map((review) => (
+
                   <div key={review.id} className="reviewitem">
                     <li className="firstname">{review?.User?.firstName}</li>
                     <li className="reviewdate">
