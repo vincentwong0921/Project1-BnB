@@ -9,9 +9,8 @@ import DeleteSpotModal from './DeleteSpotModal'
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 const ManageSpots = () => {
-  const spots = Object.values(
-    useSelector((state) => (state.spots ? state.spots : null))
-  );
+  let spots = Object.values(useSelector((state) => (state.spots ? state.spots : null)));
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

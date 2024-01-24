@@ -33,7 +33,7 @@ const ManageReviews = () => {
               <span>
                 <OpenModalButton
                     buttonText="Update"
-                    modalComponent={<UpdateReviewModal review={review} />}
+                    modalComponent={<UpdateReviewModal prereview={review} />}
                 />
                 <OpenModalButton
                     buttonText="Delete"

@@ -1,35 +1,36 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { updateReview } from "../../store/reviews";
+import { getAllReviewsOfCurrentUser, updateReview } from "../../store/reviews";
 
-const UpdateReviewModal = ({ review }) => {
+const UpdateReviewModal = ({ prereview }) => {
 
     const dispatch = useDispatch();
     const { closeModal } = useModal();
     const [stars, setStars] = useState(0);
     const [hover, setHover] = useState(null);
     const [errors, setErrors] = useState({});
-    const [reviewText, setReviewText] = useState(review.review);
+    const [review, setReview] = useState(prereview.review);
 
     useEffect(() => {
         const errs = {};
-        if (reviewText.length < 10) {
+        if (review.length < 10) {
           errs.review = "Minimum 10 characters for a review!!";
         }
         setErrors(errs);
-      }, [reviewText]);
+      }, [review]);
 
     const handleSubmit = async e => {
         try{
             e.preventDefault()
-            const updatedReview = {reviewText, stars}
-            console.log(reviewText)
-            console.log(reviewText.length)
-            await dispatch(updateReview(updatedReview))
+            prereview = {...prereview, review, stars}
+            const editedReview = await dispatch(updateReview(prereview))
+            prereview = editedReview
+            await dispatch(getAllReviewsOfCurrentUser())
             closeModal()
         } catch (error){
             const errs = await error.json()
+            console.log(errs)
             setErrors(errs.errors)
         }
     }
@@ -37,13 +38,13 @@ const UpdateReviewModal = ({ review }) => {
     return(
         <form className="reviewform" onSubmit={handleSubmit}>
 
-        <h3>How was your stay at {review.Spot.name}?</h3>
+        <h3>How was your stay at {prereview.Spot.name}?</h3>
 
         {errors.review && <span className="errormsg">{errors.review}</span>}
         <label>
           <textarea
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
           />
         </label>
 
