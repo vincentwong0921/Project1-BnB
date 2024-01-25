@@ -16,7 +16,7 @@ const SpotDetail = () => {
     navigate(`/spots/${spotId}`);
   };
 
-  const spot = useSelector((state) => state.spots ? state.spots[spotId] : null);
+  const spot = useSelector(state => state.spots ? state.spots[spotId] : null)
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
@@ -94,13 +94,13 @@ const SpotDetail = () => {
 
         <div className="pricereview">
           <div>
-            <span className="pricepernight">${formatPrice(spot?.price)} night </span>
+            <span className="pricepernight">${formatPrice(spot.price)} night </span>
             <i className="fa-solid fa-star"></i>
             {spot.avgStarRating === 0 ? (
               <span>NEW</span>
             ) : (
               <span>
-                {formatRating(spot.avgStarRating)} · {spot?.numReviews}{" "}
+                {formatRating(spot.avgStarRating)} · {spot.numReviews}{" "}
                 {spot.numReviews > 1 ? "reviews" : "review"}
               </span>
             )}

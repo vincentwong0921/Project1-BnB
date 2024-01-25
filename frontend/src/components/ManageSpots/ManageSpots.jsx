@@ -37,7 +37,7 @@ const ManageSpots = () => {
         <ul>
             {spots &&
             spots.map((spot) => (
-                <li key={spot.id}>
+                <li key={spot?.id}>
                 <Link to={`/spots/${spot?.id}`}>
                     <img
                     src={spot?.previewImage}
@@ -59,7 +59,7 @@ const ManageSpots = () => {
                     <span style={{ fontWeight: "bold" }}>${spot.price}</span> night
 
                     <div>
-                        <button onClick={() => navigate(`/spots/${spot.id}/edit`)}>Update</button>
+                        <button onClick={() => navigate(`/spots/${spot?.id}/edit`)}>Update</button>
                         <OpenModalButton
                             buttonText='Delete'
                             modalComponent={

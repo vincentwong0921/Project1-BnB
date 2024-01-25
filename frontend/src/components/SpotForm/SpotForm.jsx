@@ -18,7 +18,7 @@ const SpotForm = ({ spot, formType }) => {
   const [price, setPrice] = useState(spot?.price);
   const [errors, setErrors] = useState({});
 
-  const [preUrl, setPreUrl] = useState(spot?.SpotImages?.[0] ? spot.SpotImages[0].url : '')
+  const [preUrl, setPreUrl] = useState(spot?.SpotImages?.[0]?.url)
   const [url1, setUrl1] = useState(spot?.SpotImages?.[1]?.url );
   const [url2, setUrl2] = useState(spot?.SpotImages?.[2]?.url );
   const [url3, setUrl3] = useState(spot?.SpotImages?.[3]?.url );
@@ -26,7 +26,7 @@ const SpotForm = ({ spot, formType }) => {
 
   const reset = () => {
     setCountry(""), setAddress(""),setCity(""),setState(""),setLat(""),setLng(""),setDescription(""),
-    setName(""),setPreUrl(""),setUrl1(""),setUrl2(""),setUrl3(""),setUrl4("");
+    setName(""),setPreUrl(""),setUrl1(""),setUrl2(""),setUrl3(""),setUrl4(""), setLat(undefined), setLng(undefined)
   };
 
   useEffect(() => {
@@ -39,7 +39,12 @@ const SpotForm = ({ spot, formType }) => {
     if (!price) errs.price = "Price is required";
     if (!preUrl) errs.preUrl = "Preview image is required";
     if (!description || description && description.length < 30) errs.description = "Description needs a minimum of 30 characters";
-
+    if (lat && lat < -90 || lat > 90) {
+      errs.lat = "Latitude must be a number between -90 and 90";
+    }
+    if (lng && lng < -180 || lng > 180) {
+      errs.lng = "Latitude must be a number between -180 and 180";
+    }
     if (formType === 'Create Spot'){
       if((preUrl && !preUrl.toLowerCase().endsWith(".png")) &&(preUrl && !preUrl.toLowerCase().endsWith(".jpg")) && (preUrl && !preUrl.toLowerCase().endsWith(".jpeg"))){
         errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
@@ -58,7 +63,7 @@ const SpotForm = ({ spot, formType }) => {
       }
     }
     setErrors(errs);
-  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, formType ]);
+  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, lat, lng, formType ]);
 
   const handleSubmit = async (e) => {
     try {
@@ -104,7 +109,6 @@ const SpotForm = ({ spot, formType }) => {
       reset();
     } catch (error) {
         const errs = await error.json()
-        console.log(errs)
         setErrors(errs.errors)
     }
   };
@@ -163,7 +167,7 @@ const SpotForm = ({ spot, formType }) => {
 
       <div className="latlng">
         <label>
-            Latitude
+            Latitude {errors.lat && <span className="errormsg"> {errors.lat}</span>}
             <input
             type="text"
             value={lat}
@@ -173,7 +177,7 @@ const SpotForm = ({ spot, formType }) => {
         </label>
 
         <label>
-            Longitude
+            Longitude {errors.lng && <span className="errormsg"> {errors.lng}</span>}
             <input
             type="text"
             value={lng}

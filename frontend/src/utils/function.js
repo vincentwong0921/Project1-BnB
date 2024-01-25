@@ -4,13 +4,11 @@ export const formatDate = (date) => {
   return dateToChange.toLocaleDateString(undefined, options);
 };
 
-export const formatRating = (rating) => {
+export const formatRating = rating => {
   return rating ? rating.toFixed(1) : "";
 };
 
 
-export const formatPrice = (price) => {
-  if (typeof price === 'number') {
-    return `${price.toFixed(2)}`;
-  }
+export const formatPrice = price => {
+  return price ? price.toFixed(2) : ""
 };

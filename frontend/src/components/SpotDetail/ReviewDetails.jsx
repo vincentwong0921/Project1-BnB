@@ -4,22 +4,19 @@ import CreateReviewModal from "./CreateReviewModal";
 import DeleteReviewModal from "./DeleteReviewModal";
 import { formatRating } from "../../utils/function";
 import { formatDate } from "../../utils/function";
+import { useEffect } from "react";
 
 const ReviewDetails = ({ spotId, navigateToSpot }) => {
   let reviews = Object.values(
     useSelector((state) => (state.reviews ? state.reviews : null))
   );
 
+  reviews = reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   const spot = useSelector(state => state.spots ? state.spots[spotId] : null)
 
+  const currentUser = useSelector((state) => state.session.user ? state.session.user : null);
 
-  reviews = reviews.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
-
-  const currentUser = useSelector((state) =>
-    state.session.user ? state.session.user : null
-  );
   const userIsNotTheSpotOwner = currentUser?.id !== spot?.Owner?.id;
 
   let userDidPostReview = reviews.find(
@@ -33,7 +30,6 @@ const ReviewDetails = ({ spotId, navigateToSpot }) => {
   }
 
   if(!spot || !reviews) return <>Loading....</>
-
 
   return (
     <>

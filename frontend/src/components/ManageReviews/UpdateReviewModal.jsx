@@ -30,7 +30,6 @@ const UpdateReviewModal = ({ prereview }) => {
             closeModal()
         } catch (error){
             const errs = await error.json()
-            console.log(errs)
             setErrors(errs.errors)
         }
     }
