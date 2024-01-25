@@ -94,7 +94,7 @@ const SpotDetail = () => {
 
         <div className="pricereview">
           <div>
-            <span className="pricepernight">${formatPrice(spot.price)} night </span>
+            <span className="pricepernight">${formatPrice(spot?.price)} night </span>
             <i className="fa-solid fa-star"></i>
             {spot.avgStarRating === 0 ? (
               <span>NEW</span>

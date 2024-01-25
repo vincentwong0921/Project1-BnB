@@ -40,19 +40,19 @@ const ManageSpots = () => {
                 <li key={spot.id}>
                 <Link to={`/spots/${spot?.id}`}>
                     <img
-                    src={spot.previewImage}
+                    src={spot?.previewImage}
                     className="spotimage"
-                    title={spot.name}
-                    alt={spot.name}
+                    title={spot?.name}
+                    alt={spot?.name}
                     />
                 </Link>
 
                 <div className="SpotDetail">
                     <div className="citystaterating">
-                    {spot.city}, {spot.state}
+                    {spot?.city}, {spot?.state}
                     <div>
                         <i className="fa-solid fa-star"></i>
-                        {spot.avgRating === 0 ? "NEW" : formatRating(spot.avgRating)}
+                        {spot.avgRating === 0 ? "NEW" : formatRating(spot?.avgRating)}
                     </div>
                     </div>
 

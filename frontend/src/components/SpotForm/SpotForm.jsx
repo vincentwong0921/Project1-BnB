@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createSpot, updateSpot } from "../../store/spots";
 import { postSpotImage } from "../../store/spots";
-import { editSpotImage } from "../../store/spots";
 
 const SpotForm = ({ spot, formType }) => {
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ const SpotForm = ({ spot, formType }) => {
   const [name, setName] = useState(spot?.name);
   const [price, setPrice] = useState(spot?.price);
   const [errors, setErrors] = useState({});
-  
+
   const [preUrl, setPreUrl] = useState(spot?.SpotImages?.[0] ? spot.SpotImages[0].url : '')
   const [url1, setUrl1] = useState(spot?.SpotImages?.[1]?.url );
   const [url2, setUrl2] = useState(spot?.SpotImages?.[2]?.url );
@@ -39,46 +38,27 @@ const SpotForm = ({ spot, formType }) => {
     if (!name) errs.name = "Name is required";
     if (!price) errs.price = "Price is required";
     if (!preUrl) errs.preUrl = "Preview image is required";
-    if (!description || description && description.length < 30) {
-      errs.description = "Description needs a minimum of 30 characters";
-    }
-    if (
-      (preUrl && !preUrl.toLowerCase().endsWith(".png")) &&
-      (preUrl && !preUrl.toLowerCase().endsWith(".jpg")) &&
-      (preUrl && !preUrl.toLowerCase().endsWith(".jpeg"))
-    ) {
-      errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
-    }
-    if (
-      (url1 && !url1.toLowerCase().endsWith(".png")) &&
-      (url1 && !url1.toLowerCase().endsWith(".jpg")) &&
-      (url1 && !url1.toLowerCase().endsWith(".jpeg"))
-    ) {
-      errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
-    }
-    if (
-      (url2 && !url2.toLowerCase().endsWith(".png")) &&
-      (url2 && !url2.toLowerCase().endsWith(".jpg")) &&
-      (url2 && !url2.toLowerCase().endsWith(".jpeg"))
-    ) {
-      errs.url2 = "Image URL must end in .png, .jpg, .jpeg";
-    }
-    if (
-      (url3 && !url3.toLowerCase().endsWith(".png")) &&
-      (url3 && !url3.toLowerCase().endsWith(".jpg")) &&
-      (url3 && !url3.toLowerCase().endsWith(".jpeg"))
-    ) {
-      errs.url3 = "Image URL must end in .png, .jpg, .jpeg";
-    }
-    if (
-      (url4 && !url4.toLowerCase().endsWith(".png")) &&
-      (url4 && !url4.toLowerCase().endsWith(".jpg")) &&
-      (url4 && !url4.toLowerCase().endsWith(".jpeg"))
-    ) {
-      errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
+    if (!description || description && description.length < 30) errs.description = "Description needs a minimum of 30 characters";
+
+    if (formType === 'Create Spot'){
+      if((preUrl && !preUrl.toLowerCase().endsWith(".png")) &&(preUrl && !preUrl.toLowerCase().endsWith(".jpg")) && (preUrl && !preUrl.toLowerCase().endsWith(".jpeg"))){
+        errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
+      }
+      if((url1 && !url1.toLowerCase().endsWith(".png")) &&(url1 && !url1.toLowerCase().endsWith(".jpg")) && (url1 && !url1.toLowerCase().endsWith(".jpeg"))){
+        errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
+      }
+      if((url2 && !url1.toLowerCase().endsWith(".png")) &&(url2 && !url2.toLowerCase().endsWith(".jpg")) && (url2 && !url2.toLowerCase().endsWith(".jpeg"))){
+        errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
+      }
+      if((url3 && !url3.toLowerCase().endsWith(".png")) && (url3 && !url3.toLowerCase().endsWith(".jpg")) && (url3 && !url3.toLowerCase().endsWith(".jpeg"))){
+        errs.url3 = "Image URL must end in .png, .jpg, .jpeg";
+      }
+      if((url4 && !url4.toLowerCase().endsWith(".png")) && (url4 && !url4.toLowerCase().endsWith(".jpg")) && (url4 && !url4.toLowerCase().endsWith(".jpeg"))){
+        errs.url4 = "Image URL must end in .png, .jpg, .jpeg";
+      }
     }
     setErrors(errs);
-  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, spot ]);
+  }, [ country, address, city, state, price, description, name, preUrl, url1, url2, url3, url4, formType ]);
 
   const handleSubmit = async (e) => {
     try {
@@ -92,41 +72,37 @@ const SpotForm = ({ spot, formType }) => {
         spot.lng = lng || 20;
       }
 
-      if (formType === "Update Your Spot") {
+      if (formType === "Update Spot") {
         const editedSpot = await dispatch(updateSpot(spot))
         spot = editedSpot
-        await dispatch(editSpotImage(spot.id, previewImage))
-
-
       } else if (formType === "Create Spot") {
         const newSpot = await dispatch(createSpot(spot))
         spot = newSpot
         await dispatch(postSpotImage(spot.id, previewImage))
+      }
 
-        if(url1){
-          const img1 = {url: url1, preview: false}
-          await dispatch(postSpotImage(spot.id, img1))
-        }
+      if(url1){
+        const img1 = {url: url1, preview: false}
+        await dispatch(postSpotImage(spot.id, img1))
+      }
 
-        if(url2){
-          const img2 = {url: url2, preview: false}
-          await dispatch(postSpotImage(spot.id, img2))
-        }
+      if(url2){
+        const img2 = {url: url2, preview: false}
+        await dispatch(postSpotImage(spot.id, img2))
+      }
 
-        if(url3){
-          const img3 = {url: url3, preview: false}
-          await dispatch(postSpotImage(spot.id, img3))
-        }
+      if(url3){
+        const img3 = {url: url3, preview: false}
+        await dispatch(postSpotImage(spot.id, img3))
+      }
 
-        if(url4){
-          const img4 = {url: url4, preview: false}
-          await dispatch(postSpotImage(spot.id, img4))
-        }
+      if(url4){
+        const img4 = {url: url4, preview: false}
+        await dispatch(postSpotImage(spot.id, img4))
       }
 
       navigate(`/spots/${spot.id}`);
       reset();
-
     } catch (error) {
         const errs = await error.json()
         console.log(errs)
