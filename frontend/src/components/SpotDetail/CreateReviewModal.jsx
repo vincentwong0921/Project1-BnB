@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { postReview } from "../../store/reviews";
+import { getAllReviewsOfASpot, postReview } from "../../store/reviews";
 import { getOneSpot } from "../../store/spots";
 
 const CreateReviewModal = ({ spot, navigateToSpot }) => {
@@ -26,6 +26,7 @@ const CreateReviewModal = ({ spot, navigateToSpot }) => {
       const newReview = { review, stars };
       await dispatch(postReview(spot.id, newReview));
       await dispatch(getOneSpot(spot.id))
+      await dispatch(getAllReviewsOfASpot(spot.id))
       closeModal();
       navigateToSpot(`${spot.id}`);
     } catch(error){
