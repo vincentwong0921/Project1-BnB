@@ -89,7 +89,7 @@ const ProfileButton = ({ user }) => {
                                 <OpenModalButton
                                     buttonText='Sign Up'
                                     onButtonClick={closeMenu}
-                                    modalComponent={<SignupFormModal/>}
+                                    modalComponent={<SignupFormModal navigateToHome={navigateToHome}/>}
                                 />
                             </div>
                         </div>

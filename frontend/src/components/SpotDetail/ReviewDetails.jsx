@@ -4,7 +4,6 @@ import CreateReviewModal from "./CreateReviewModal";
 import DeleteReviewModal from "./DeleteReviewModal";
 import { formatRating } from "../../utils/function";
 import { formatDate } from "../../utils/function";
-import { useEffect } from "react";
 
 const ReviewDetails = ({ spotId, navigateToSpot }) => {
   let reviews = Object.values(
