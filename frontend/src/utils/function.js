@@ -9,9 +9,8 @@ export const formatRating = (rating) => {
 };
 
 
-export const formatPrice = price => {
-  return price.toFixed(2)
-}
-
-
-
+export const formatPrice = (price) => {
+  if (typeof price === 'number') {
+    return `${price.toFixed(2)}`;
+  }
+};

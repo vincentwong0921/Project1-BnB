@@ -79,26 +79,25 @@ const SpotForm = ({ spot, formType }) => {
         const newSpot = await dispatch(createSpot(spot))
         spot = newSpot
         await dispatch(postSpotImage(spot.id, previewImage))
-      }
+        if(url1){
+          const img1 = {url: url1, preview: false}
+          await dispatch(postSpotImage(spot.id, img1))
+        }
 
-      if(url1){
-        const img1 = {url: url1, preview: false}
-        await dispatch(postSpotImage(spot.id, img1))
-      }
+        if(url2){
+          const img2 = {url: url2, preview: false}
+          await dispatch(postSpotImage(spot.id, img2))
+        }
 
-      if(url2){
-        const img2 = {url: url2, preview: false}
-        await dispatch(postSpotImage(spot.id, img2))
-      }
+        if(url3){
+          const img3 = {url: url3, preview: false}
+          await dispatch(postSpotImage(spot.id, img3))
+        }
 
-      if(url3){
-        const img3 = {url: url3, preview: false}
-        await dispatch(postSpotImage(spot.id, img3))
-      }
-
-      if(url4){
-        const img4 = {url: url4, preview: false}
-        await dispatch(postSpotImage(spot.id, img4))
+        if(url4){
+          const img4 = {url: url4, preview: false}
+          await dispatch(postSpotImage(spot.id, img4))
+        }
       }
 
       navigate(`/spots/${spot.id}`);
