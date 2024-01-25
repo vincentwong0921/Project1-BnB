@@ -100,7 +100,7 @@ const SpotDetail = () => {
               <span>NEW</span>
             ) : (
               <span>
-                {formatRating(spot.avgStarRating)} · {spot.numReviews}{" "}
+                {formatRating(spot?.avgStarRating)} · {spot.numReviews}{" "}
                 {spot.numReviews > 1 ? "reviews" : "review"}
               </span>
             )}

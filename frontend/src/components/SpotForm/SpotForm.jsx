@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { createSpot, updateSpot } from "../../store/spots";
+import { createSpot, getOneSpot, updateSpot } from "../../store/spots";
 import { postSpotImage } from "../../store/spots";
 
 const SpotForm = ({ spot, formType }) => {
@@ -26,7 +26,7 @@ const SpotForm = ({ spot, formType }) => {
 
   const reset = () => {
     setCountry(""), setAddress(""),setCity(""),setState(""),setLat(""),setLng(""),setDescription(""),
-    setName(""),setPreUrl(""),setUrl1(""),setUrl2(""),setUrl3(""),setUrl4(""), setLat(undefined), setLng(undefined)
+    setName(""),setPreUrl(""),setUrl1(""),setUrl2(""),setUrl3(""),setUrl4(""), setLat(""), setLng("")
   };
 
   useEffect(() => {
@@ -49,10 +49,10 @@ const SpotForm = ({ spot, formType }) => {
       if((preUrl && !preUrl.toLowerCase().endsWith(".png")) &&(preUrl && !preUrl.toLowerCase().endsWith(".jpg")) && (preUrl && !preUrl.toLowerCase().endsWith(".jpeg"))){
         errs.preUrl = "Image URL must end in .png, .jpg, .jpeg";
       }
-      if((url1 && !url1.toLowerCase().endsWith(".png")) &&(url1 && !url1.toLowerCase().endsWith(".jpg")) && (url1 && !url1.toLowerCase().endsWith(".jpeg"))){
+      if((url1 && !url1.toLowerCase().endsWith(".png")) && (url1 && !url1.toLowerCase().endsWith(".jpg")) && (url1 && !url1.toLowerCase().endsWith(".jpeg"))){
         errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
       }
-      if((url2 && !url1.toLowerCase().endsWith(".png")) &&(url2 && !url2.toLowerCase().endsWith(".jpg")) && (url2 && !url2.toLowerCase().endsWith(".jpeg"))){
+      if((url2 && !url1.toLowerCase().endsWith(".png")) && (url2 && !url2.toLowerCase().endsWith(".jpg")) && (url2 && !url2.toLowerCase().endsWith(".jpeg"))){
         errs.url1 = "Image URL must end in .png, .jpg, .jpeg";
       }
       if((url3 && !url3.toLowerCase().endsWith(".png")) && (url3 && !url3.toLowerCase().endsWith(".jpg")) && (url3 && !url3.toLowerCase().endsWith(".jpeg"))){
@@ -80,6 +80,7 @@ const SpotForm = ({ spot, formType }) => {
       if (formType === "Update Spot") {
         const editedSpot = await dispatch(updateSpot(spot))
         spot = editedSpot
+        await dispatch(getOneSpot(spot.id))
       } else if (formType === "Create Spot") {
         const newSpot = await dispatch(createSpot(spot))
         spot = newSpot
