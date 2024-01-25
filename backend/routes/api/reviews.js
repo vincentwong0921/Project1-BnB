@@ -41,7 +41,7 @@ router.get('/current', requireAuth, async(req, res, next) => {
             },
             {
                 model: Image,
-                where: {preview: true},
+                // where: {preview: true},
                 attributes: {exclude: ['preview', 'imageableId', 'imageableType', 'createdAt', 'updatedAt']}
             }
         ]
