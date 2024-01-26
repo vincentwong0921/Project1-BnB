@@ -9,7 +9,7 @@ const Navigation = ({ isLoaded }) => {
     <div className="navi">
         <div className="leftlogo">
             <i className="fa-brands fa-airbnb"></i>
-            <NavLink to={"/"}> Vincent Air Bnb</NavLink>
+            <NavLink to={"/"}> Hair Bnb</NavLink>
         </div>
 
         <div className="rightlogo">

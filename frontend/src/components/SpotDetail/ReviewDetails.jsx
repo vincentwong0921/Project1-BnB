@@ -35,21 +35,23 @@ const ReviewDetails = ({ spotId, navigateToSpot }) => {
       <div>
         <i className="fa-solid fa-star"></i>
         {spot.numReviews === 0 ? (
-          <>
+          <span className="createreviewmodal">
             <span className="NEW">NEW</span>
             {!userDidPostReview && userIsNotTheSpotOwner && currentUser ? (
-              <OpenModalButton
-                buttonText="Post Your Review"
-                modalComponent={
-                  <CreateReviewModal
-                    spot={spot}
-                    navigateToSpot={navigateToSpot}
-                  />
-                }
-              />
+              <div className="postreviewbutton">
+                <OpenModalButton
+                  buttonText="Post Your Review"
+                  modalComponent={
+                    <CreateReviewModal
+                      spot={spot}
+                      navigateToSpot={navigateToSpot}
+                    />
+                  }
+                />
+              </div>
             ) : null}
             <p>Be the first to post a review!</p>
-          </>
+          </span>
         ) : (
           <span>
             <span className="numreviews">
@@ -57,7 +59,7 @@ const ReviewDetails = ({ spotId, navigateToSpot }) => {
               {spot.numReviews > 1 ? "reviews" : "review"}
             </span>
 
-            <div>
+            <div className="postyourreviewbutton">
               {!userDidPostReview && userIsNotTheSpotOwner && currentUser ? (
                 <OpenModalButton
                   buttonText="Post Your Review"
@@ -81,14 +83,16 @@ const ReviewDetails = ({ spotId, navigateToSpot }) => {
                     </li>
                     <li>{review.review}</li>
                     {review.userId === currentUser?.id ? (
-                      <OpenModalButton
-                        buttonText="Delete"
-                        modalComponent={
-                        <DeleteReviewModal
-                          review={review}
-                          spot={spot}
-                        />}
-                      />
+                      <div className="deleteyourreviewbutton">
+                        <OpenModalButton
+                          buttonText="Delete"
+                          modalComponent={
+                          <DeleteReviewModal
+                            review={review}
+                            spot={spot}
+                          />}
+                        />
+                      </div>
                     ) : null}
                   </div>
                 ))}

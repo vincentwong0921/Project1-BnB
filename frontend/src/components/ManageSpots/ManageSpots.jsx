@@ -30,7 +30,7 @@ const ManageSpots = () => {
     <>
       <div className='managespotfirstdiv'>
         <h2>Manage Spots</h2>
-        <button onClick={createSpotClick}>Create a New Spot</button>
+        <button className="newspotcreate" onClick={createSpotClick}>Create a New Spot</button>
       </div>
 
       <div className="managespotcontainer">

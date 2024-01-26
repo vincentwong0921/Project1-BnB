@@ -19,7 +19,7 @@ li {
   min-width: 700px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   height: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .profile-dropdown {
@@ -84,7 +84,7 @@ ul.profile-dropdown {
 }
 
 .rightlogo {
-  font-size: 25px;
+  font-size: 20px;
   right: 15px;
   height: auto;
 }
@@ -114,6 +114,11 @@ ul.profile-dropdown {
   margin: 0 auto;
 }
 
+.spotimage {
+  width: 450px;
+  height: 450px;
+}
+
 .spotsbox {
   padding: 0 5px;
 }
@@ -136,7 +141,7 @@ ul.profile-dropdown {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-  gap: 5px
+  gap: 5px;
 }
 
 .leftimage {
@@ -154,7 +159,7 @@ ul.profile-dropdown {
   display: flex;
   flex-direction: column;
   max-width: 48%;
-
+  
   ul {
     list-style: none;
     padding: 0;
@@ -170,7 +175,7 @@ ul.profile-dropdown {
   border: 3px solid black;
   border-radius: 5px;
   padding: 10px;
-  margin: 10px;
+  margin-bottom: 10px;
   font-weight: bold;
   font-size: 20px;
   width: 380px;
@@ -184,6 +189,11 @@ ul.profile-dropdown {
   margin-bottom: 10px;
 }
 
+.priceandstar{
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Review Details at Spot detail Page */
 
 .reviews{
@@ -191,6 +201,10 @@ ul.profile-dropdown {
   flex-direction: column;
   gap: 10px;
   padding: 0;
+}
+
+.fa-solid.fa-star{
+  margin-bottom: 10px;
 }
 
 /* Spot Form */
@@ -264,11 +278,6 @@ ul.profile-dropdown {
 
 .emailcontainer {
   border-bottom: 1px solid black;
-}
-
-.spotimage {
-  width: 400px;
-  height: 400px;
 }
 
 .spotImages {
@@ -417,4 +426,26 @@ input[type=radio]{
   display: flex;
   gap: 10px;
   margin-top: 5px;
+}
+
+.newspotcreate{
+  color: black;
+  box-shadow: 3px 3px 3px black;
+}
+
+.managespotbuttons button,
+.postyourreviewbutton button,
+.deleteyourreviewbutton button,
+.managereviewbuttons button
+{
+  color: black;
+  box-shadow: 3px 3px 3px black;
+}
+
+.reviewslist{
+  padding: 0;
+}
+
+.managereviewspage{
+  margin-left: 20px;
 }

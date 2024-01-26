@@ -154,7 +154,7 @@ const SpotForm = ({ spot, formType }) => {
               placeholder="City"
             />
           </label>
-
+          
           <label>
             State {errors.state && <span className="errormsg"> {errors.state}</span>}
             <input

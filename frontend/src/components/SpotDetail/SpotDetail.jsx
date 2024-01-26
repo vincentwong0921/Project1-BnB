@@ -16,7 +16,9 @@ const SpotDetail = () => {
     navigate(`/spots/${spotId}`);
   };
 
-  const spot = useSelector(state => state.spots ? state.spots[spotId] : null)
+  const spot = useSelector((state) =>
+    state.spots ? state.spots[spotId] : null
+  );
 
   useEffect(() => {
     dispatch(getOneSpot(spotId));
@@ -35,7 +37,6 @@ const SpotDetail = () => {
       </div>
 
       <div className="spotImages">
-
         <div className="leftimage">
           {spot.SpotImages && spot.SpotImages.length > 0 && (
             <img
@@ -81,7 +82,6 @@ const SpotDetail = () => {
             </div>
           )}
         </div>
-
       </div>
 
       <div className="Spot-Info">
@@ -93,17 +93,24 @@ const SpotDetail = () => {
         </div>
 
         <div className="pricereview">
-          <div>
-            <span className="pricepernight">${formatPrice(spot.price)} night </span>
-            <i className="fa-solid fa-star"></i>
-            {spot.avgStarRating === 0 ? (
-              <span>NEW</span>
-            ) : (
-              <span>
-                {formatRating(spot?.avgStarRating)} · {spot.numReviews}{" "}
-                {spot.numReviews > 1 ? "reviews" : "review"}
-              </span>
-            )}
+
+          <div className="priceandstar">
+
+            <div className="pricepernight">
+              ${formatPrice(spot?.price)} night{" "}
+            </div>
+            
+            <div className="starrrs">
+              <i className="fa-solid fa-star"></i>
+              {spot.avgStarRating === 0 ? (
+                <span>NEW</span>
+              ) : (
+                <span>
+                  {formatRating(spot?.avgStarRating)} · {spot?.numReviews}{" "}
+                  {spot.numReviews > 1 ? "reviews" : "review"}
+                </span>
+              )}
+            </div>
           </div>
 
           <div>
@@ -120,10 +127,7 @@ const SpotDetail = () => {
       </div>
 
       <div>
-        <ReviewDetails
-          spotId={spotId}
-          navigateToSpot={navigateToSpot}
-        />
+        <ReviewDetails spotId={spotId} navigateToSpot={navigateToSpot} />
       </div>
     </div>
   );

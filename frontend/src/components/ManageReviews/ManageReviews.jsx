@@ -21,9 +21,9 @@ const ManageReviews = () => {
   if (!reviews) return <>Loading...</>;
 
   return (
-    <>
+    <div className="managereviewspage">
       <h1>Manage Reviews</h1>
-      <ul>
+      <ul className="reviewslist">
         {reviews &&
           reviews.map((review) => (
             <div key={review.id} className="reviewitem">
@@ -44,7 +44,7 @@ const ManageReviews = () => {
             </div>
           ))}
       </ul>
-    </>
+    </div>
   );
 };
 
