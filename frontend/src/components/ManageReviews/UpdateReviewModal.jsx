@@ -37,7 +37,7 @@ const UpdateReviewModal = ({ prereview }) => {
     return(
         <form className="reviewform" onSubmit={handleSubmit}>
 
-        <h3>How was your stay at {prereview.Spot.name}?</h3>
+        <h3>How was your stay at {prereview?.Spot?.name}?</h3>
 
         {errors.review && <span className="errormsg">{errors.review}</span>}
         <label>

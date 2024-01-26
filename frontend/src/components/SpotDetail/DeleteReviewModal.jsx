@@ -22,13 +22,19 @@ const DeleteReviewModal = ({review, spot}) => {
     }
 
     return(
-        <form>
+        <form className="deletereviewform">
             <h2>Confirm Delete</h2>
             <p>Are you sure you want to delete this review?</p>
 
-            <div>
-                <button onClick={confirmdelete}>Yes (Delete Review)</button>
-                <button onClick={notDelete}>No (Keep Review)</button>
+            <div className="deletereviewbuttons">
+                <button
+                    className="deletereviewbutton"
+                    onClick={confirmdelete}
+                >Yes (Delete Review)</button>
+                <button
+                    className="notdeletereviewbutton"
+                    onClick={notDelete}
+                >No (Keep Review)</button>
             </div>
         </form>
     )

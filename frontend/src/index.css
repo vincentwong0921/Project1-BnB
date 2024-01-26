@@ -1,26 +1,169 @@
 /* TODO: Add sitewide styles */
+
+/* navigation bar */
+
 .hidden {
   display: none;
 }
 
-.fa-id-card {
-  font-size: 40px;
-  cursor: pointer;
-  right: 50px;
-  top: 20px;
+li {
+  list-style-type: none;
 }
 
-.id-card {
-  font-size: 30px;
-  cursor: pointer;
-  margin-left: 250px;
-}
-
-.Spot-Info {
-  border-bottom: 1px solid black;
+.navi {
+  background-color: #fff;
+  border-bottom: 2px solid #ccc;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  min-width: 700px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  height: 40px;
+  margin-bottom: 20px;
+}
+
+.profile-dropdown {
+  border: 3px solid black;
+  border-radius: 10px;
+  width: 160px;
+  height: 140px;
+  font-size: 20px;
+  position: fixed;
+  right:15px
+}
+
+ul.profile-dropdown {
+  justify-content: center;
+  align-items: center;
+}
+
+.id-card{
+  height: 40px;
+  width: 50px;
+  border-radius: 10px;
+}
+
+.fa-solid.fa-id-card {
+  font-size: 30px;
+}
+
+.underprofile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 10px;
+}
+
+.login button{
+  width: 150px;
+  height: 40px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: yellowgreen;
+  margin-right: 25px;
+  font-weight: bold;
+}
+
+.signup button{
+  width: 150px;
+  height: 40px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: yellow;
+  margin-right: 25px;
+  font-weight: bold;
+}
+
+.leftlogo,
+.leftlogo > a {
+  font-size: 25px;
+  color: orangered;
+  text-decoration: none;
+}
+
+.rightlogo {
+  font-size: 25px;
+  right: 15px;
+  height: auto;
+}
+
+.rightlogo > a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: darkblue;
+}
+
+.profilesection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10px;
+
+}
+
+/* Landing Page */
+
+.spotshow {
+  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 2000px;
+  margin: 0 auto;
+}
+
+.spotsbox {
+  padding: 0 5px;
+}
+
+@media (max-width: 500px) {
+  .spotshow {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Spot Details */
+
+.spotdetailpage {
+  min-width: 1000px;
+  max-width: 1000px;
+}
+
+.spotImages {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 5px
+}
+
+.leftimage {
+  max-width: 50%;
+
+  .firstImage {
+    width: 100%;
+    height: 300px
+  }
+}
+
+.righttopimages,
+.rightbottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 48%;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    .otherImage {
+      width: 100%;
+      height: 148px;
+    }
+  }
 }
 
 .pricereview {
@@ -34,38 +177,23 @@
   text-align: center;
 }
 
-.navi {
-  background-color: #fff;
-  border-bottom: 1px solid #ccc;
-  padding: 15px;
+.Spot-Info {
+  border-bottom: 1px solid black;
   display: flex;
   justify-content: space-between;
-  min-width: 700px;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  height: 35px;
+  margin-bottom: 10px;
 }
 
-.leftlogo,
-.leftlogo > a {
-  font-size: 25px;
-  color: orangered;
-  text-decoration: none;
+/* Review Details at Spot detail Page */
+
+.reviews{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
 }
 
-.rightlogo {
-  font-size: 20px;
-  right: 15px;
-}
-
-.rightlogo > a {
-  margin-right: 10px;
-  text-decoration: none;
-  color: darkblue;
-}
-
-li {
-  list-style-type: none;
-}
+/* Spot Form */
 
 .newspotaddress {
   padding-bottom: 10px;
@@ -113,8 +241,20 @@ li {
 .reservebutton,
 .loginbutton,
 .signupbutton,
-.submitreviewbutton {
+.submitreviewbutton,
+.deletereviewbutton,
+.deletespotbutton {
   background-color: orangered;
+  color: white;
+  box-shadow: 3px 3px 3px black;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.notdeletereviewbutton,
+.notdeletespotbutton {
+  background-color: grey;
   color: white;
   box-shadow: 3px 3px 3px black;
   width: 100%;
@@ -135,62 +275,9 @@ li {
   display: flex;
 }
 
-.spotshow {
-  margin-top: 120px;
-  gap: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .citystaterating {
   display: flex;
   justify-content: space-between;
-}
-
-.spotImages {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.leftimage {
-  max-width: 50%;
-
-  .firstImage {
-    width: 100%;
-    height: 300px
-  }
-}
-
-.righttopimages,
-.rightbottom {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    .otherImage {
-      width: 100%;
-      height: 148px;
-    }
-  }
-}
-
-.spotsbox {
-  padding: 0 10px;
-}
-
-.profile-dropdown {
-  border: 3px solid black;
-  border-radius: 10px;
-  width: 160px;
-  height: 140px;
-  font-size: 20px;
-  margin-left: 270px;
 }
 
 .managereviewlink {
@@ -313,12 +400,21 @@ input[type=radio]{
   width: 500px;
   height: auto;
   border-radius: 20px;
-  border: 2px solid black;
+  border: 5px solid black;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .signupbutton:disabled,
 .loginbutton:disabled,
-.submitreviewbutton:disabled
+.submitreviewbutton:disabled,
+.spotbutton:disabled
 {
    background-color: lightgrey;
+}
+
+.managespotbuttons,
+.managereviewbuttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
 }

@@ -52,13 +52,13 @@ const ManageSpots = () => {
                     {spot?.city}, {spot?.state}
                     <div>
                         <i className="fa-solid fa-star"></i>
-                        {spot.avgRating === 0 ? "NEW" : formatRating(spot?.avgRating)}
+                        {spot?.avgRating === 0 ? "NEW" : formatRating(spot?.avgRating)}
                     </div>
                     </div>
 
-                    <span style={{ fontWeight: "bold" }}>${spot.price}</span> night
+                    <span style={{ fontWeight: "bold" }}>${spot?.price}</span> night
 
-                    <div>
+                    <div className="managespotbuttons">
                         <button onClick={() => navigate(`/spots/${spot?.id}/edit`)}>Update</button>
                         <OpenModalButton
                             buttonText='Delete'

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { getAllReviewsOfASpot, postReview } from "../../store/reviews";
@@ -12,26 +12,25 @@ const CreateReviewModal = ({ spot, navigateToSpot }) => {
   const [stars, setStars] = useState(0);
   const [hover, setHover] = useState(null);
 
-  useEffect(() => {
-    const errs = {};
-    if (review.length < 10) {
-      errs.review = "Minimum 10 characters for a review!!";
-    }
-    setErrors(errs);
-  }, [review]);
-
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const newReview = { review, stars };
-      await dispatch(postReview(spot.id, newReview));
-      await dispatch(getOneSpot(spot.id))
-      await dispatch(getAllReviewsOfASpot(spot.id))
-      closeModal();
-      navigateToSpot(`${spot.id}`);
-    } catch(error){
-      const errs = await error.json()
-      setErrors(errs.errors)
+      const errs = {};
+      if (review.length < 10) {
+        errs.review = "Minimum 10 characters for a review!!";
+        setErrors(errs);
+      } else {
+        const newReview = { review, stars };
+        await dispatch(postReview(spot.id, newReview));
+        await dispatch(getOneSpot(spot.id));
+        await dispatch(getAllReviewsOfASpot(spot.id));
+        closeModal();
+        navigateToSpot(`${spot.id}`);
+      }
+
+    } catch (error) {
+      const errs = await error.json();
+      setErrors(errs.errors);
     }
   };
 
@@ -69,6 +68,7 @@ const CreateReviewModal = ({ spot, navigateToSpot }) => {
                 onMouseEnter={() => setHover(currentRating)}
                 onMouseLeave={() => setHover(null)}
               ></i>
+              {index === 4 && <span> Stars</span>}
             </label>
           );
         })}
@@ -77,7 +77,7 @@ const CreateReviewModal = ({ spot, navigateToSpot }) => {
       <div>
         <button
           className="submitreviewbutton"
-          disabled={Object.values(errors).length}
+          disabled={review.length < 10 || !stars}
         >
           Submit Your Review
         </button>

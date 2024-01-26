@@ -1,21 +1,22 @@
 import { useSelector } from "react-redux";
-import { getAllReviewsOfCurrentUser } from "../../store/reviews";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { formatDate } from "../../utils/function";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteReviewModal from "../SpotDetail/DeleteReviewModal";
 import UpdateReviewModal from "./UpdateReviewModal";
+import { useEffect } from "react";
+import { getAllReviewsOfCurrentUser } from "../../store/reviews";
+import { useDispatch } from "react-redux";
 
 const ManageReviews = () => {
+  const dispatch = useDispatch()
   const reviews = Object.values(
     useSelector((state) => (state.reviews ? state.reviews : null))
   );
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllReviewsOfCurrentUser());
-  }, [dispatch]);
+    dispatch(getAllReviewsOfCurrentUser())
+  }, [dispatch])
+
 
   if (!reviews) return <>Loading...</>;
 
@@ -30,7 +31,7 @@ const ManageReviews = () => {
               <li className="reviewdate">{formatDate(review?.createdAt)}</li>
               <li>{review.review}</li>
 
-              <span>
+              <div className="managereviewbuttons">
                 <OpenModalButton
                     buttonText="Update"
                     modalComponent={<UpdateReviewModal prereview={review} />}
@@ -39,7 +40,7 @@ const ManageReviews = () => {
                     buttonText="Delete"
                     modalComponent={<DeleteReviewModal review={review} />}
                 />
-              </span>
+              </div>
             </div>
           ))}
       </ul>

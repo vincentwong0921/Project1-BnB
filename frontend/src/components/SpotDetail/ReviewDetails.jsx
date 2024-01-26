@@ -71,12 +71,11 @@ const ReviewDetails = ({ spotId, navigateToSpot }) => {
               ) : null}
             </div>
 
-            <ul>
+            <ul className="reviews">
               {reviews &&
                 reviews.map((review) => (
-
                   <div key={review.id} className="reviewitem">
-                    <li className="firstname">{review?.User?.firstName}</li>
+                    <li className="firstname">{review?.User?.firstName} {review?.User?.lastName}</li>
                     <li className="reviewdate">
                       {formatDate(review?.createdAt)}
                     </li>

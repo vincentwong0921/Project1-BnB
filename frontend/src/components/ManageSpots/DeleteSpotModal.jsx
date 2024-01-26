@@ -2,31 +2,38 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { removeSpot } from "../../store/spots";
 
-const DeleteSpotModal = ({spot}) => {
-    const dispatch = useDispatch();
-    const { closeModal } = useModal()
+const DeleteSpotModal = ({ spot }) => {
+  const dispatch = useDispatch();
+  const { closeModal } = useModal();
 
-    const confirmdelete = async e => {
-        e.preventDefault();
-        await dispatch(removeSpot(spot.id))
-        closeModal()
-    }
+  const confirmdelete = async (e) => {
+    e.preventDefault();
+    await dispatch(removeSpot(spot.id));
+    closeModal();
+  };
 
-    const notDelete = e => {
-        e.preventDefault()
-        closeModal()
-    }
+  const notDelete = (e) => {
+    e.preventDefault();
+    closeModal();
+  };
 
-    return(
-        <form>
-            <h2>Confirm Delete</h2>
-            <p>Are you sure you want to remove this spot from the listings?</p>
+  return (
+    <form className="deleteformModal">
+      <h2>Confirm Delete</h2>
+      <p>Are you sure you want to remove this spot from the listings?</p>
 
-            <button onClick={confirmdelete}>Yes (Delete Spot)</button>
-            <button onClick={notDelete}>No (Keep Spot)</button>
-        </form>
-    )
-}
+      <div>
+        <button className="deletespotbutton" onClick={confirmdelete}>
+          Yes (Delete Spot)
+        </button>
+      </div>
+      <div>
+        <button onClick={notDelete} className="notdeletespotbutton">
+          No (Keep Spot)
+        </button>
+      </div>
+    </form>
+  );
+};
 
-
-export default DeleteSpotModal
+export default DeleteSpotModal;
