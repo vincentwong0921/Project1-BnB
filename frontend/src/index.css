@@ -159,16 +159,19 @@ ul.profile-dropdown {
   display: flex;
   flex-direction: column;
   max-width: 48%;
-  
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    .otherImage {
-      width: 100%;
-      height: 148px;
-    }
-  }
+}
+
+.righttopimages ul,
+.rightbottom ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.righttopimages ul .otherImage,
+.rightbottom ul .otherImage {
+  width: 100%;
+  height: 148px;
 }
 
 .pricereview {
