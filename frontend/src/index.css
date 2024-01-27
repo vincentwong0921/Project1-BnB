@@ -106,7 +106,7 @@ ul.profile-dropdown {
 /* Landing Page */
 
 .spotshow {
-  gap: 20px;
+  gap: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -115,8 +115,8 @@ ul.profile-dropdown {
 }
 
 .spotimage {
-  width: 450px;
-  height: 450px;
+  width: 400px;
+  height: 400px;
 }
 
 .spotsbox {
